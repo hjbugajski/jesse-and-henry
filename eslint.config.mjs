@@ -60,7 +60,14 @@ export default [
     ...typescript.configs.disableTypeChecked,
   },
   {
-    ignores: ['**/node_modules/**', '**/.next/**', '**/.next-env.d.ts'],
+    ignores: [
+      '**/node_modules/**',
+      '**/.next/**',
+      '**/.next-env.d.ts',
+      '**/payload-types.ts',
+      '**/importMap.js',
+      '**/migrations/**',
+    ],
   },
   {
     rules: {
