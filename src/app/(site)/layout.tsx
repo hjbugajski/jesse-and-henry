@@ -1,4 +1,7 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
+
+import { env } from '@/env/client';
 
 import './globals.css';
 
@@ -14,7 +17,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <Script
+          src={env.NEXT_PUBLIC_UMAMI_SRC}
+          data-website-id={env.NEXT_PUBLIC_UMAMI_ID}
+          data-domains={env.NEXT_PUBLIC_DOMAIN}
+        />
+      </body>
     </html>
   );
 }
