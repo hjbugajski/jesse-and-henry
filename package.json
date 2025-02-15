@@ -4,8 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "i:dev": "infisical run pnpm dev",
     "build": "next build",
+    "i:build": "infisical run pnpm build",
     "start": "next start",
+    "i:start": "infisical run pnpm start",
     "lint": "next lint",
     "lint:all": "pnpm prettier && pnpm eslint && pnpm stylelint",
     "eslint": "eslint .",
@@ -17,9 +20,11 @@
   },
   "packageManager": "pnpm@9.15.4",
   "dependencies": {
+    "@t3-oss/env-nextjs": "^0.12.0",
     "next": "15.1.7",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.20.0",
