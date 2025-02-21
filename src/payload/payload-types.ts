@@ -7,6 +7,43 @@
  */
 
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PayloadLinkArrayField".
+ */
+export type PayloadLinkArrayField =
+  | {
+      text: string;
+      icon?: PayloadIconField;
+      type: 'internal' | 'external';
+      relationship?: (string | null) | PayloadPagesCollection;
+      anchor?: string | null;
+      url?: string | null;
+      rel?: ('noopener' | 'noreferrer' | 'nofollow')[] | null;
+      newTab?: boolean | null;
+      umamiEvent?: string | null;
+      umamiEventId?: string | null;
+      id?: string | null;
+    }[]
+  | null;
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PayloadIconField".
+ */
+export type PayloadIconField =
+  | (
+      | 'alert'
+      | 'arrowRight'
+      | 'borgoCorsignano'
+      | 'chevronDown'
+      | 'close'
+      | 'externalLink'
+      | 'heart'
+      | 'help'
+      | 'info'
+      | 'menu'
+    )
+  | null;
+/**
  * Supported timezones in IANA format.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -59,13 +96,22 @@ export type SupportedTimezones =
   | 'Pacific/Noumea'
   | 'Pacific/Auckland'
   | 'Pacific/Fiji';
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PayloadColorField".
+ */
+export type PayloadColorField = 'neutral' | 'neutral-variant' | 'primary' | 'secondary' | 'tertiary' | 'danger';
 
 export interface Config {
   auth: {
     users: UserAuthOperations;
   };
+  blocks: {};
   collections: {
     users: PayloadUsersCollection;
+    pages: PayloadPagesCollection;
+    faqs: PayloadFaqsCollection;
+    media: PayloadMediaCollection;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -73,6 +119,9 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
+    faqs: FaqsSelect<false> | FaqsSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -80,8 +129,14 @@ export interface Config {
   db: {
     defaultIDType: string;
   };
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    config: PayloadConfigGlobal;
+    navigation: PayloadNavigationGlobal;
+  };
+  globalsSelect: {
+    config: ConfigSelect<false> | ConfigSelect<true>;
+    navigation: NavigationSelect<false> | NavigationSelect<true>;
+  };
   locale: null;
   user: PayloadUsersCollection & {
     collection: 'users';
@@ -131,14 +186,121 @@ export interface PayloadUsersCollection {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface PayloadPagesCollection {
+  id: string;
+  title: string;
+  description: string;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  slug?: string | null;
+  protected?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs".
+ */
+export interface PayloadFaqsCollection {
+  id: string;
+  question: string;
+  answer?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface PayloadMediaCollection {
+  id: string;
+  alt: string;
+  displayOriginal: boolean;
+  dataUrl?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    preview?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
   id: string;
-  document?: {
-    relationTo: 'users';
-    value: string | PayloadUsersCollection;
-  } | null;
+  document?:
+    | ({
+        relationTo: 'users';
+        value: string | PayloadUsersCollection;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: string | PayloadPagesCollection;
+      } | null)
+    | ({
+        relationTo: 'faqs';
+        value: string | PayloadFaqsCollection;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: string | PayloadMediaCollection;
+      } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
@@ -201,6 +363,75 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  content?: T;
+  slug?: T;
+  protected?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs_select".
+ */
+export interface FaqsSelect<T extends boolean = true> {
+  question?: T;
+  answer?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  displayOriginal?: T;
+  dataUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        preview?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
@@ -230,6 +461,229 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "config".
+ */
+export interface PayloadConfigGlobal {
+  id: string;
+  rsvpDeadline: string;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation".
+ */
+export interface PayloadNavigationGlobal {
+  id: string;
+  links?: PayloadLinkArrayField;
+  showCta?: boolean | null;
+  callToAction?: PayloadLinkGroupField;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PayloadLinkGroupField".
+ */
+export interface PayloadLinkGroupField {
+  text: string;
+  icon?: PayloadIconField;
+  type: 'internal' | 'external';
+  relationship?: (string | null) | PayloadPagesCollection;
+  anchor?: string | null;
+  url?: string | null;
+  rel?: ('noopener' | 'noreferrer' | 'nofollow')[] | null;
+  newTab?: boolean | null;
+  umamiEvent?: string | null;
+  umamiEventId?: string | null;
+  id?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "config_select".
+ */
+export interface ConfigSelect<T extends boolean = true> {
+  rsvpDeadline?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation_select".
+ */
+export interface NavigationSelect<T extends boolean = true> {
+  links?: T | PayloadLinkArrayFieldSelect<T>;
+  showCta?: T;
+  callToAction?: T | PayloadLinkGroupFieldSelect<T>;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PayloadLinkArrayField_select".
+ */
+export interface PayloadLinkArrayFieldSelect<T extends boolean = true> {
+  text?: T;
+  icon?: T;
+  type?: T;
+  relationship?: T;
+  anchor?: T;
+  url?: T;
+  rel?: T;
+  newTab?: T;
+  umamiEvent?: T;
+  umamiEventId?: T;
+  id?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PayloadLinkGroupField_select".
+ */
+export interface PayloadLinkGroupFieldSelect<T extends boolean = true> {
+  text?: T;
+  icon?: T;
+  type?: T;
+  relationship?: T;
+  anchor?: T;
+  url?: T;
+  rel?: T;
+  newTab?: T;
+  umamiEvent?: T;
+  umamiEventId?: T;
+  color?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PayloadHeroBlock".
+ */
+export interface PayloadHeroBlock {
+  titleOne: string;
+  titleTwo: string;
+  subtitle: string;
+  image: string | PayloadMediaCollection;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'hero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PayloadAlertBlock".
+ */
+export interface PayloadAlertBlock {
+  heading: string;
+  icon: PayloadIconField;
+  color: PayloadColorField;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  action?: boolean | null;
+  link?: PayloadLinkGroupField;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'alert';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PayloadButtonLinkBlock".
+ */
+export interface PayloadButtonLinkBlock {
+  text: string;
+  icon?: PayloadIconField;
+  type: 'internal' | 'external';
+  relationship?: (string | null) | PayloadPagesCollection;
+  anchor?: string | null;
+  url?: string | null;
+  rel?: ('noopener' | 'noreferrer' | 'nofollow')[] | null;
+  newTab?: boolean | null;
+  umamiEvent?: string | null;
+  umamiEventId?: string | null;
+  color: PayloadColorField;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'buttonLink';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PayloadFaqBlock".
+ */
+export interface PayloadFaqBlock {
+  faqs?: (string | PayloadFaqsCollection)[] | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'faq';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PayloadGalleryBlock".
+ */
+export interface PayloadGalleryBlock {
+  images: (string | PayloadMediaCollection)[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'gallery';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PayloadImageLinkBlock".
+ */
+export interface PayloadImageLinkBlock {
+  text: string;
+  icon?: PayloadIconField;
+  type: 'internal' | 'external';
+  relationship?: (string | null) | PayloadPagesCollection;
+  anchor?: string | null;
+  url?: string | null;
+  rel?: ('noopener' | 'noreferrer' | 'nofollow')[] | null;
+  newTab?: boolean | null;
+  umamiEvent?: string | null;
+  umamiEventId?: string | null;
+  image: string | PayloadMediaCollection;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'imageLink';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PayloadSectionBlock".
+ */
+export interface PayloadSectionBlock {
+  heading?: string | null;
+  border: boolean;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'section';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

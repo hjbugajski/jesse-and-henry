@@ -95,7 +95,14 @@ export default [
               group: 'external',
               position: 'before',
             },
+            {
+              pattern: '*.{css,scss}',
+              patternOptions: { matchBase: true },
+              group: 'unknown',
+              position: 'after',
+            },
           ],
+          warnOnUnassignedImports: true,
           pathGroupsExcludedImportTypes: ['react'],
           'newlines-between': 'always',
           alphabetize: {

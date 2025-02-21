@@ -33,3 +33,8 @@ export function hasRoleOrSelfField(...roles: Role[]): FieldAccess {
 export function hasRoleOrPublished(...roles: Role[]): Access {
   return ({ req: { user } }) => roleAccess(user, roles) || { _status: { equals: 'published' } };
 }
+
+export function hasAuthAndNotProtectedField(): FieldAccess {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  return ({ req: { user }, doc }) => (user ? true : doc?.protected === false);
+}
