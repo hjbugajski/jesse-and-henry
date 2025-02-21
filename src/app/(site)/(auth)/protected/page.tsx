@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import { queryPage } from '@/actions/page';
 import { metadata } from '@/app/(site)/layout';
 import ProtectedForm from '@/components/forms/protected';
@@ -14,6 +16,16 @@ export async function generateMetadata({ params }: PageProps) {
   };
 }
 
+const ProtectedFormLoading = () => (
+  <div className="flex flex-col gap-4">
+    <div className="space-y-2">
+      <div className="h-3 w-36 animate-pulse rounded-sm bg-black/5" />
+      <div className="h-11 w-full animate-pulse rounded-lg bg-black/5" />
+    </div>
+    <div className="h-11 w-full animate-pulse rounded-lg bg-black/10" />
+  </div>
+);
+
 export default function Page() {
   return (
     <>
@@ -22,7 +34,9 @@ export default function Page() {
         Enter the guest password found on the back of your save the date or included with your
         invitation to view this page.
       </p>
-      <ProtectedForm />
+      <Suspense fallback={<ProtectedFormLoading />}>
+        <ProtectedForm />
+      </Suspense>
     </>
   );
 }
