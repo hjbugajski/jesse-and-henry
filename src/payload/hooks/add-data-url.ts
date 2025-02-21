@@ -1,6 +1,8 @@
 import type { CollectionAfterChangeHook } from 'payload';
 import sharp from 'sharp';
 
+import type { PayloadMediaCollection } from '@/payload/payload-types';
+
 export const addDataUrl: CollectionAfterChangeHook<PayloadMediaCollection> = async ({
   context,
   doc,

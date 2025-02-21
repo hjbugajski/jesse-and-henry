@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 
-import type { ToastProps } from '@/lib/components/Toast';
+import type { ToastProps } from '@/lib/components/toast';
 
 const TOAST_LIMIT = 3;
 const TOAST_REMOVE_DELAY = 1000000;

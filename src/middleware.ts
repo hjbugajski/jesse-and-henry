@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-import { fetchUser } from '@/app/actions/auth';
+import { fetchUser } from '@/actions/auth';
 
 export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith('/protected')) {

@@ -5,7 +5,7 @@ import { cache } from 'react';
 import { draftMode } from 'next/headers';
 import { getPayload } from 'payload';
 
-import { fetchUser } from '@/app/actions/auth';
+import { fetchUser } from '@/actions/auth';
 import config from '@payload-config';
 
 export const queryPage = cache(async ({ slug: segments }: { slug: string[] }) => {

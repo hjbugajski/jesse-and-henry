@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import type { InferType } from 'yup';
 import { object, string } from 'yup';
 
-import { fetchUserLogin } from '@/app/actions/auth';
+import { fetchUserLogin } from '@/actions/auth';
 import { Button } from '@/lib/components/button';
 import {
   Form,

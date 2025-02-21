@@ -1,5 +1,5 @@
+import { queryPage } from '@/actions/page';
 import { metadata } from '@/app/(site)/layout';
-import { queryPage } from '@/app/actions/page';
 import ProtectedForm from '@/components/forms/protected';
 import type { PageProps } from '@/lib/types/page-props';
 import { pageTitle } from '@/lib/utils/page';

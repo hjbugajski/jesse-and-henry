@@ -1,9 +1,9 @@
 import { notFound, redirect } from 'next/navigation';
 import { getPayload } from 'payload';
 
+import { fetchUser } from '@/actions/auth';
+import { queryPage } from '@/actions/page';
 import { metadata } from '@/app/(site)/layout';
-import { fetchUser } from '@/app/actions/auth';
-import { queryPage } from '@/app/actions/page';
 import { RichText } from '@/components/rich-text';
 import type { PageProps } from '@/lib/types/page-props';
 import { pageTitle } from '@/lib/utils/page';

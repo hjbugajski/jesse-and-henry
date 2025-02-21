@@ -1,5 +1,6 @@
+import type { Block } from 'payload';
+
 import { linkFields } from '@/payload/fields/link';
-import { Block } from 'payload';
 
 export const ImageLink: Block = {
   slug: 'imageLink',

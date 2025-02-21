@@ -1,7 +1,5 @@
 import type { ComponentProps } from 'react';
 
-import { cn } from '@/lib/utils/cn';
-
 const IconBorgoCorsignano = (props: ComponentProps<'svg'>) => (
   <svg
     version="1.0"
