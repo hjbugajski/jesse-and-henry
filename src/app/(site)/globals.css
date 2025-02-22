@@ -1,0 +1,172 @@
+/* stylelint-disable custom-property-pattern */
+@import 'tailwindcss';
+
+@theme {
+  /* fonts */
+  --font-serif:
+    var(--font-alice), serif, ui-serif, georgia, cambria, 'Times New Roman', times, serif;
+  --font-sans:
+    var(--font-lato), sans-serif, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+  /* colors */
+  --color-*: initial;
+
+  /* color neutral */
+  --color-neutral-10: #191c1a;
+  --color-neutral-20: #2e312e;
+  --color-neutral-25: #393c39;
+  --color-neutral-30: #444844;
+  --color-neutral-35: #505350;
+  --color-neutral-40: #5c5f5c;
+  --color-neutral-50: #757874;
+  --color-neutral-60: #8f918e;
+  --color-neutral-70: #a9aca8;
+  --color-neutral-80: #c5c7c3;
+  --color-neutral-90: #e1e3df;
+  --color-neutral-95: #eff1ed;
+  --color-neutral-98: #f8faf5;
+  --color-neutral-99: #fbfdf8;
+
+  /* color neutral-variant */
+  --color-neutral-variant-10: #151d18;
+  --color-neutral-variant-20: #2a322d;
+  --color-neutral-variant-25: #353d37;
+  --color-neutral-variant-30: #404943;
+  --color-neutral-variant-35: #4c544e;
+  --color-neutral-variant-40: #58605a;
+  --color-neutral-variant-50: #707972;
+  --color-neutral-variant-60: #8a938b;
+  --color-neutral-variant-70: #a5ada6;
+  --color-neutral-variant-80: #c0c9c0;
+  --color-neutral-variant-90: #dce5dc;
+  --color-neutral-variant-95: #eaf3ea;
+  --color-neutral-variant-98: #f3fcf3;
+  --color-neutral-variant-99: #f6fff6;
+
+  /* color primary */
+  --color-primary-10: #002112;
+  --color-primary-20: #003822;
+  --color-primary-25: #00452a;
+  --color-primary-30: #005233;
+  --color-primary-35: #005f3c;
+  --color-primary-40: #006c45;
+  --color-primary-50: #108859;
+  --color-primary-60: #39a371;
+  --color-primary-70: #57be8a;
+  --color-primary-80: #73daa4;
+  --color-primary-90: #90f7bf;
+  --color-primary-95: #c0ffd8;
+  --color-primary-98: #e8ffee;
+  --color-primary-99: #f4fff5;
+
+  /* color secondary */
+  --color-secondary-10: #0b1f15;
+  --color-secondary-20: #203529;
+  --color-secondary-25: #2b4033;
+  --color-secondary-30: #364b3e;
+  --color-secondary-35: #42574a;
+  --color-secondary-40: #4e6355;
+  --color-secondary-50: #667c6e;
+  --color-secondary-60: #7f9687;
+  --color-secondary-70: #9ab1a1;
+  --color-secondary-80: #b5ccbb;
+  --color-secondary-90: #d0e8d7;
+  --color-secondary-95: #def7e5;
+  --color-secondary-98: #e8ffee;
+  --color-secondary-99: #f4fff5;
+
+  /* color tertiary */
+  --color-tertiary-10: #001f28;
+  --color-tertiary-20: #043542;
+  --color-tertiary-25: #15404d;
+  --color-tertiary-30: #234c59;
+  --color-tertiary-35: #2f5865;
+  --color-tertiary-40: #3c6472;
+  --color-tertiary-50: #557d8b;
+  --color-tertiary-60: #6f97a5;
+  --color-tertiary-70: #89b1c1;
+  --color-tertiary-80: #a4cddd;
+  --color-tertiary-90: #bfe9f9;
+  --color-tertiary-95: #dcf5ff;
+  --color-tertiary-98: #f2fbff;
+  --color-tertiary-99: #f9fdff;
+
+  /* color danger */
+  --color-danger-10: #410002;
+  --color-danger-20: #690005;
+  --color-danger-25: #7e0007;
+  --color-danger-30: #93000a;
+  --color-danger-35: #a80710;
+  --color-danger-40: #ba1a1a;
+  --color-danger-50: #de3730;
+  --color-danger-60: #ff5449;
+  --color-danger-70: #ff897d;
+  --color-danger-80: #ffb4ab;
+  --color-danger-90: #ffdad6;
+  --color-danger-95: #ffedea;
+  --color-danger-98: #fff8f7;
+  --color-danger-99: #fffbff;
+
+  /* tracking */
+  --tracking-widest: 0.25rem;
+
+  /* breakpoints */
+  --breakpoint-xs: 425px;
+  --breakpoint-md-lg: 992px;
+
+  /* animations */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+
+  * {
+    @apply font-sans font-normal tracking-wider;
+  }
+
+  *::selection {
+    @apply bg-tertiary-90/80 text-neutral-25;
+  }
+
+  a {
+    @apply hover:text-neutral-10 focus-visible:ring-neutral-40/50 rounded-md underline underline-offset-4 transition-all focus-visible:no-underline focus-visible:ring-2 focus-visible:outline-hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif tracking-wider uppercase antialiased;
+  }
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+
+  to {
+    height: 0;
+  }
+}
