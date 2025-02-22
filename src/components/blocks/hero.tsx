@@ -1,5 +1,4 @@
-import Image from 'next/image';
-
+import { PayloadImage } from '@/lib/components/payload-image';
 import type { PayloadHeroBlock } from '@/payload/payload-types';
 
 export function HeroBlock({ image, titleOne, titleTwo, subtitle }: PayloadHeroBlock) {
@@ -7,13 +6,8 @@ export function HeroBlock({ image, titleOne, titleTwo, subtitle }: PayloadHeroBl
     <div className="md-lg:px-4 mx-auto w-full max-w-7xl">
       <div className="md-lg:rounded-3xl relative flex h-[768px] w-full justify-center overflow-clip sm:h-[1024px] md:justify-start lg:h-[825px]">
         {typeof image !== 'string' ? (
-          <Image
-            src={image.url!}
-            alt={image.alt}
-            width={image.width!}
-            height={image.height!}
-            placeholder="blur"
-            blurDataURL={image.dataUrl!}
+          <PayloadImage
+            {...image}
             loading="eager"
             className="min-h-full w-full object-cover object-center"
           />

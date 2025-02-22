@@ -1,7 +1,7 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
 import { Icons } from '@/lib/components/icons';
+import { PayloadImage } from '@/lib/components/payload-image';
 import { linkProps } from '@/lib/utils/link';
 import type { PayloadImageLinkBlock } from '@/payload/payload-types';
 
@@ -9,15 +9,7 @@ export function ImageLinkBlock({ image, ...link }: PayloadImageLinkBlock) {
   return (
     <div className="relative my-4 flex h-96 w-full items-center justify-center overflow-clip rounded-xl">
       {typeof image === 'string' ? null : (
-        <Image
-          src={image.url!}
-          alt={image.alt}
-          width={image.width!}
-          height={image.height!}
-          placeholder="blur"
-          blurDataURL={image.dataUrl!}
-          className="absolute object-cover object-center"
-        />
+        <PayloadImage {...image} className="absolute object-cover object-center" />
       )}
       <div className="bg-neutral-10/50 absolute inset-0 z-0 h-full w-full rounded-xl" />
       <Link
