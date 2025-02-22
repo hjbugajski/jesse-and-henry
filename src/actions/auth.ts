@@ -20,27 +20,21 @@ interface PayloadApiMe<T = any> {
 const SERVER_API_URL = env.SERVER_URL + '/api';
 
 const fetchMe = async <T>(collection: AuthCollection): Promise<PayloadApiMe<T> | null> => {
-  try {
-    const jwt = await getCookieValue(env.PAYLOAD_PROTECTED_TOKEN);
-    const res = await fetch(`${SERVER_API_URL}/${collection}/me`, {
-      method: 'GET',
-      cache: 'no-store',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `JWT ${jwt}`,
-      },
-    });
+  const jwt = await getCookieValue(env.PAYLOAD_PROTECTED_TOKEN);
+  const res = await fetch(`${SERVER_API_URL}/${collection}/me`, {
+    method: 'GET',
+    cache: 'no-store',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `JWT ${jwt}`,
+    },
+  });
 
-    if (!res.ok) {
-      return null;
-    }
-
-    return (await res.json()) as PayloadApiMe<T>;
-  } catch (error) {
-    console.error(error);
-
+  if (!res.ok) {
     return null;
   }
+
+  return (await res.json()) as PayloadApiMe<T>;
 };
 
 export const fetchUser = async () => await fetchMe<PayloadUsersCollection>('users');
@@ -56,26 +50,20 @@ const fetchLogin = async <T>(
   collection: AuthCollection,
   body: { email: string; password: string },
 ): Promise<PayloadApiLogin<T> | null> => {
-  try {
-    const res = await fetch(`${SERVER_API_URL}/${collection}/login`, {
-      method: 'POST',
-      cache: 'no-store',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
+  const res = await fetch(`${SERVER_API_URL}/${collection}/login`, {
+    method: 'POST',
+    cache: 'no-store',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
 
-    if (!res.ok) {
-      return null;
-    }
-
-    return (await res.json()) as PayloadApiLogin<T>;
-  } catch (error) {
-    console.error(error);
-
+  if (!res.ok) {
     return null;
   }
+
+  return (await res.json()) as PayloadApiLogin<T>;
 };
 
 export const fetchLogout = async (
