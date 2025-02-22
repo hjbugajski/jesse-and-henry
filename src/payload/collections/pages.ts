@@ -1,5 +1,5 @@
 import { BlocksFeature, lexicalEditor } from '@payloadcms/richtext-lexical';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidatePath } from 'next/cache';
 import type {
   CollectionAfterChangeHook,
   CollectionAfterDeleteHook,
@@ -32,7 +32,6 @@ const revalidatePageAfterChange: CollectionAfterChangeHook<PayloadPagesCollectio
 
     payload.logger.info(`Revalidating path: ${path}`);
     revalidatePath(path);
-    revalidateTag('pages-sitemap');
   }
 
   if (previousDoc?._status === 'published' && doc._status !== 'published') {
@@ -40,7 +39,6 @@ const revalidatePageAfterChange: CollectionAfterChangeHook<PayloadPagesCollectio
 
     payload.logger.info(`Revalidating previous path: ${oldPath}`);
     revalidatePath(oldPath);
-    revalidateTag('pages-sitemap');
   }
 
   return doc;
@@ -54,7 +52,6 @@ export const revalidatePageAfterDelete: CollectionAfterDeleteHook<PayloadPagesCo
     const path = doc?.slug === 'home' ? '/' : `/${doc?.slug}`;
 
     revalidatePath(path);
-    revalidateTag('pages-sitemap');
   }
 
   return doc;
