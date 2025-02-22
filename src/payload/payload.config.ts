@@ -117,8 +117,6 @@ export default buildConfig({
           secretAccessKey: env.R2_SECRET_ACCESS_KEY,
         },
         region: 'auto',
-        requestChecksumCalculation: 'WHEN_REQUIRED',
-        responseChecksumValidation: 'WHEN_REQUIRED',
       },
     }),
   ],
