@@ -1,6 +1,10 @@
-import type { Access, FieldAccess } from 'payload';
+import type { Access, AccessArgs, AccessResult, FieldAccess, Where } from 'payload';
 
-import type { PayloadPagesCollection, PayloadUsersCollection } from '@/payload/payload-types';
+import type {
+  PayloadGuestsCollection,
+  PayloadPagesCollection,
+  PayloadUsersCollection,
+} from '@/payload/payload-types';
 
 export const Role = {
   Admin: 'admin',
@@ -10,8 +14,11 @@ export const Role = {
 
 export type Role = (typeof Role)[keyof typeof Role];
 
-function roleAccess(user: PayloadUsersCollection | null, roles: Role[]): boolean {
-  return roles.some((r) => user?.roles?.includes(r));
+function roleAccess(
+  user: PayloadUsersCollection | PayloadGuestsCollection | null,
+  roles: Role[],
+): boolean {
+  return roles.some((r) => user && 'roles' in user && user.roles.includes(r));
 }
 
 export function hasRole(...roles: Role[]): Access {
@@ -36,4 +43,37 @@ export function hasRoleOrPublished(...roles: Role[]): Access {
 
 export function hasAuthAndNotProtectedField(): FieldAccess<PayloadPagesCollection> {
   return ({ req: { user }, doc }) => (user ? true : doc?.breadcrumbs?.[0]?.url !== '/protected');
+}
+
+const selfOrPartyQuery = (user: PayloadUsersCollection | PayloadGuestsCollection | null): Where => {
+  const or: Where[] = [{ id: { equals: user?.id } }];
+
+  if (user && 'party' in user) {
+    const partyId = typeof user.party === 'string' ? user.party : user.party?.id;
+
+    or.push({
+      and: [
+        { party: { exists: true } },
+        { party: { not_equals: null } },
+        { party: { equals: partyId } },
+      ],
+    });
+  }
+
+  return { or };
+};
+
+export function hasRoleSelfOrParty(...roles: Role[]): Access {
+  return ({ req: { user } }) => roleAccess(user, roles) || selfOrPartyQuery(user);
+}
+
+export async function hasRoleSelfPartyOrBeforeDeadline(
+  { req: { payload, user } }: AccessArgs,
+  ...roles: Role[]
+): Promise<AccessResult> {
+  const beforeDeadline = await payload
+    .findGlobal({ slug: 'config' })
+    .then((config) => (config?.rsvpDeadline ? new Date() < new Date(config.rsvpDeadline) : true));
+
+  return roleAccess(user, roles) || (beforeDeadline && selfOrPartyQuery(user));
 }

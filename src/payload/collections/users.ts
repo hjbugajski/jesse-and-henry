@@ -36,6 +36,7 @@ export const Users: CollectionConfig<'users'> = {
     {
       name: 'roles',
       type: 'select',
+      interfaceName: 'PayloadRolesField',
       access: {
         read: hasRoleOrSelfField(Role.Admin),
         update: hasRoleField(Role.Admin),

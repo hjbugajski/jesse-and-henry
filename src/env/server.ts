@@ -3,6 +3,8 @@ import { z } from 'zod';
 
 export const env = createEnv({
   server: {
+    DOMAIN: z.string().min(1),
+    GUEST_PASSWORD: z.string().min(1),
     PAYLOAD_ADMIN_USER: z.string().min(1),
     PAYLOAD_ADMIN_PASSWORD: z.string().min(1),
     PAYLOAD_PROTECTED_TOKEN: z.string().min(1),
@@ -24,6 +26,8 @@ export const env = createEnv({
       ),
   },
   runtimeEnv: {
+    DOMAIN: process.env.DOMAIN,
+    GUEST_PASSWORD: process.env.GUEST_PASSWORD,
     PAYLOAD_ADMIN_USER: process.env.PAYLOAD_ADMIN_USER,
     PAYLOAD_ADMIN_PASSWORD: process.env.PAYLOAD_ADMIN_PASSWORD,
     PAYLOAD_PROTECTED_TOKEN: process.env.PAYLOAD_PROTECTED_TOKEN,

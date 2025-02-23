@@ -8,6 +8,33 @@
 
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PayloadTagColorField".
+ */
+export type PayloadTagColorField =
+  | ('gray' | 'green' | 'teal' | 'cyan' | 'blue' | 'violet' | 'purple' | 'plum' | 'pink' | 'red' | 'orange')
+  | null;
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PayloadRsvpField".
+ */
+export type PayloadRsvpField = ('accept' | 'decline') | null;
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PayloadYesNoField".
+ */
+export type PayloadYesNoField = ('yes' | 'no') | null;
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PayloadMealPreferenceField".
+ */
+export type PayloadMealPreferenceField = ('beef' | 'fish' | 'vegetarian') | null;
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PayloadRolesField".
+ */
+export type PayloadRolesField = ('admin' | 'editor' | 'public')[];
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "PayloadLinkArrayField".
  */
 export type PayloadLinkArrayField =
@@ -109,24 +136,33 @@ export type PayloadColorField = 'neutral' | 'neutral-variant' | 'primary' | 'sec
 
 export interface Config {
   auth: {
+    guests: GuestAuthOperations;
     users: UserAuthOperations;
   };
   blocks: {};
   collections: {
-    users: PayloadUsersCollection;
     pages: PayloadPagesCollection;
     faqs: PayloadFaqsCollection;
     media: PayloadMediaCollection;
+    guests: PayloadGuestsCollection;
+    parties: PayloadPartiesCollection;
+    relations: PayloadRelationsCollection;
+    sides: PayloadSidesCollection;
+    users: PayloadUsersCollection;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {};
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     faqs: FaqsSelect<false> | FaqsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    guests: GuestsSelect<false> | GuestsSelect<true>;
+    parties: PartiesSelect<false> | PartiesSelect<true>;
+    relations: RelationsSelect<false> | RelationsSelect<true>;
+    sides: SidesSelect<false> | SidesSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -143,12 +179,34 @@ export interface Config {
     navigation: NavigationSelect<false> | NavigationSelect<true>;
   };
   locale: null;
-  user: PayloadUsersCollection & {
+  user:
+    | (PayloadGuestsCollection & {
+        collection: 'guests';
+      })
+    | (PayloadUsersCollection & {
         collection: 'users';
-  };
+      });
   jobs: {
     tasks: unknown;
     workflows: unknown;
+  };
+}
+export interface GuestAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
   };
 }
 export interface UserAuthOperations {
@@ -168,26 +226,6 @@ export interface UserAuthOperations {
     email: string;
     password: string;
   };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
- */
-export interface PayloadUsersCollection {
-  id: string;
-  firstName?: string | null;
-  lastName?: string | null;
-  roles: ('admin' | 'editor' | 'public')[];
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -292,15 +330,105 @@ export interface PayloadMediaCollection {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "guests".
+ */
+export interface PayloadGuestsCollection {
+  id: string;
+  first?: string | null;
+  middle?: string | null;
+  last?: string | null;
+  party?: (string | null) | PayloadPartiesCollection;
+  side?: (string | null) | PayloadSidesCollection;
+  relation?: (string | null) | PayloadRelationsCollection;
+  phone?: string | null;
+  address?: string | null;
+  rsvpWelcomeParty?: PayloadRsvpField;
+  rsvpRehearsalDinner?: PayloadRsvpField;
+  rsvpWeddingDay?: PayloadRsvpField;
+  rsvpPoolDay?: PayloadRsvpField;
+  transportationToVenue?: PayloadYesNoField;
+  transportationFromVenue?: PayloadYesNoField;
+  legalName?: string | null;
+  dateOfBirth?: string | null;
+  countryOfBirth?: string | null;
+  allergies?: string | null;
+  mealPreference?: PayloadMealPreferenceField;
+  sort?: number | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "parties".
+ */
+export interface PayloadPartiesCollection {
+  id: string;
+  value: string;
+  color?: PayloadTagColorField;
+  sort?: number | null;
+  code?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sides".
+ */
+export interface PayloadSidesCollection {
+  id: string;
+  value: string;
+  color?: PayloadTagColorField;
+  sort?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "relations".
+ */
+export interface PayloadRelationsCollection {
+  id: string;
+  value: string;
+  color?: PayloadTagColorField;
+  sort?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface PayloadUsersCollection {
+  id: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  roles: PayloadRolesField;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
   id: string;
   document?:
-    | ({
-        relationTo: 'users';
-        value: string | PayloadUsersCollection;
-      } | null)
     | ({
         relationTo: 'pages';
         value: string | PayloadPagesCollection;
@@ -312,9 +440,34 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: string | PayloadMediaCollection;
+      } | null)
+    | ({
+        relationTo: 'guests';
+        value: string | PayloadGuestsCollection;
+      } | null)
+    | ({
+        relationTo: 'parties';
+        value: string | PayloadPartiesCollection;
+      } | null)
+    | ({
+        relationTo: 'relations';
+        value: string | PayloadRelationsCollection;
+      } | null)
+    | ({
+        relationTo: 'sides';
+        value: string | PayloadSidesCollection;
+      } | null)
+    | ({
+        relationTo: 'users';
+        value: string | PayloadUsersCollection;
       } | null);
   globalSlug?: string | null;
-  user: {
+  user:
+    | {
+        relationTo: 'guests';
+        value: string | PayloadGuestsCollection;
+      }
+    | {
         relationTo: 'users';
         value: string | PayloadUsersCollection;
       };
@@ -327,7 +480,12 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: string;
-  user: {
+  user:
+    | {
+        relationTo: 'guests';
+        value: string | PayloadGuestsCollection;
+      }
+    | {
         relationTo: 'users';
         value: string | PayloadUsersCollection;
       };
@@ -354,24 +512,6 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
- */
-export interface UsersSelect<T extends boolean = true> {
-  firstName?: T;
-  lastName?: T;
-  roles?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -448,6 +588,93 @@ export interface MediaSelect<T extends boolean = true> {
               filename?: T;
             };
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "guests_select".
+ */
+export interface GuestsSelect<T extends boolean = true> {
+  first?: T;
+  middle?: T;
+  last?: T;
+  party?: T;
+  side?: T;
+  relation?: T;
+  phone?: T;
+  address?: T;
+  rsvpWelcomeParty?: T;
+  rsvpRehearsalDinner?: T;
+  rsvpWeddingDay?: T;
+  rsvpPoolDay?: T;
+  transportationToVenue?: T;
+  transportationFromVenue?: T;
+  legalName?: T;
+  dateOfBirth?: T;
+  countryOfBirth?: T;
+  allergies?: T;
+  mealPreference?: T;
+  sort?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "parties_select".
+ */
+export interface PartiesSelect<T extends boolean = true> {
+  value?: T;
+  color?: T;
+  sort?: T;
+  code?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "relations_select".
+ */
+export interface RelationsSelect<T extends boolean = true> {
+  value?: T;
+  color?: T;
+  sort?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sides_select".
+ */
+export interface SidesSelect<T extends boolean = true> {
+  value?: T;
+  color?: T;
+  sort?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  firstName?: T;
+  lastName?: T;
+  roles?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
