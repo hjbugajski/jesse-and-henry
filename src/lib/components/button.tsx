@@ -3,7 +3,6 @@ import type { ComponentProps } from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { type VariantProps, cva } from 'class-variance-authority';
 
-import type { NonNull } from '@/lib/types/non-null';
 import { cn } from '@/lib/utils/cn';
 import type { PayloadColorField } from '@/payload/payload-types';
 
@@ -148,7 +147,7 @@ const buttonVariants = cva(
 
 export interface ButtonProps extends ComponentProps<'button'>, VariantProps<typeof buttonVariants> {
   asChild?: boolean;
-  color?: NonNull<PayloadColorField>;
+  color?: NonNullable<PayloadColorField>;
 }
 
 const Button = ({

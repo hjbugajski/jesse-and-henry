@@ -14,11 +14,13 @@ import { IconHelp } from '@/lib/components/icons/help';
 import { IconInfo } from '@/lib/components/icons/info';
 import { IconMenu } from '@/lib/components/icons/menu';
 import type { BaseProps } from '@/lib/types/base-props';
-import type { NonNull } from '@/lib/types/non-null';
 import { cn } from '@/lib/utils/cn';
 import type { PayloadIconField } from '@/payload/payload-types';
 
-const icons: Record<NonNull<PayloadIconField>, (props: ComponentProps<'svg'>) => JSX.Element> = {
+const icons: Record<
+  NonNullable<PayloadIconField>,
+  (props: ComponentProps<'svg'>) => JSX.Element
+> = {
   alert: IconAlert,
   arrowRight: IconArrowRight,
   borgoCorsignano: IconBorgoCorsignano,
