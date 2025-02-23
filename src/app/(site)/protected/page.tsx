@@ -28,7 +28,7 @@ const ProtectedFormLoading = () => (
 
 export default function Page() {
   return (
-    <>
+    <div className="mx-auto w-full max-w-lg px-4 py-12">
       <h1 className="mb-4 text-3xl tracking-wider">Protected</h1>
       <p className="mb-6 text-sm text-pretty">
         Enter the guest password found on the back of your save the date or included with your
@@ -37,6 +37,6 @@ export default function Page() {
       <Suspense fallback={<ProtectedFormLoading />}>
         <ProtectedForm />
       </Suspense>
-    </>
+    </div>
   );
 }

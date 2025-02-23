@@ -1,7 +1,6 @@
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { getPayload } from 'payload';
 
-import { fetchUser } from '@/actions/auth';
 import { queryPage } from '@/actions/page';
 import { metadata } from '@/app/(site)/layout';
 import { RichText } from '@/components/rich-text';
@@ -44,14 +43,6 @@ export default async function Page({ params }: PageProps) {
 
   if (!page) {
     notFound();
-  }
-
-  if (page.protected) {
-    const user = await fetchUser();
-
-    if (!user?.user) {
-      redirect(`/protected?redirectUrl=${encodeURIComponent(`/${slug?.join('/')}`)}`);
-    }
   }
 
   return <RichText data={page.content} />;

@@ -1,6 +1,6 @@
 import type { Access, FieldAccess } from 'payload';
 
-import type { PayloadUsersCollection } from '@/payload/payload-types';
+import type { PayloadPagesCollection, PayloadUsersCollection } from '@/payload/payload-types';
 
 export const Role = {
   Admin: 'admin',
@@ -34,7 +34,6 @@ export function hasRoleOrPublished(...roles: Role[]): Access {
   return ({ req: { user } }) => roleAccess(user, roles) || { _status: { equals: 'published' } };
 }
 
-export function hasAuthAndNotProtectedField(): FieldAccess {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  return ({ req: { user }, doc }) => (user ? true : doc?.protected === false);
+export function hasAuthAndNotProtectedField(): FieldAccess<PayloadPagesCollection> {
+  return ({ req: { user }, doc }) => (user ? true : doc?.breadcrumbs?.[0]?.url !== '/protected');
 }

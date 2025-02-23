@@ -67,6 +67,7 @@ const baseFields: Field[] = [
         name: 'rel',
         label: 'Rel Attribute',
         type: 'select',
+        interfaceName: 'PayloadRelField',
         hasMany: true,
         options: ['noopener', 'noreferrer', 'nofollow'],
         admin: {

@@ -18,7 +18,7 @@ export type PayloadLinkArrayField =
       relationship?: (string | null) | PayloadPagesCollection;
       anchor?: string | null;
       url?: string | null;
-      rel?: ('noopener' | 'noreferrer' | 'nofollow')[] | null;
+      rel?: PayloadRelField;
       newTab?: boolean | null;
       umamiEvent?: string | null;
       umamiEventId?: string | null;
@@ -43,6 +43,11 @@ export type PayloadIconField =
       | 'menu'
     )
   | null;
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PayloadRelField".
+ */
+export type PayloadRelField = ('noopener' | 'noreferrer' | 'nofollow')[] | null;
 /**
  * Supported timezones in IANA format.
  *
@@ -139,7 +144,7 @@ export interface Config {
   };
   locale: null;
   user: PayloadUsersCollection & {
-    collection: 'users';
+        collection: 'users';
   };
   jobs: {
     tasks: unknown;
@@ -208,7 +213,14 @@ export interface PayloadPagesCollection {
     [k: string]: unknown;
   } | null;
   slug?: string | null;
-  protected?: boolean | null;
+  parent?: (string | null) | PayloadPagesCollection;
+  breadcrumbs?:
+    | {
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -303,9 +315,9 @@ export interface PayloadLockedDocument {
       } | null);
   globalSlug?: string | null;
   user: {
-    relationTo: 'users';
-    value: string | PayloadUsersCollection;
-  };
+        relationTo: 'users';
+        value: string | PayloadUsersCollection;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -316,9 +328,9 @@ export interface PayloadLockedDocument {
 export interface PayloadPreference {
   id: string;
   user: {
-    relationTo: 'users';
-    value: string | PayloadUsersCollection;
-  };
+        relationTo: 'users';
+        value: string | PayloadUsersCollection;
+      };
   key?: string | null;
   value?:
     | {
@@ -370,7 +382,14 @@ export interface PagesSelect<T extends boolean = true> {
   description?: T;
   content?: T;
   slug?: T;
-  protected?: T;
+  parent?: T;
+  breadcrumbs?:
+    | T
+    | {
+        url?: T;
+        label?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -495,7 +514,7 @@ export interface PayloadLinkGroupField {
   relationship?: (string | null) | PayloadPagesCollection;
   anchor?: string | null;
   url?: string | null;
-  rel?: ('noopener' | 'noreferrer' | 'nofollow')[] | null;
+  rel?: PayloadRelField;
   newTab?: boolean | null;
   umamiEvent?: string | null;
   umamiEventId?: string | null;
@@ -610,7 +629,7 @@ export interface PayloadButtonLinkBlock {
   relationship?: (string | null) | PayloadPagesCollection;
   anchor?: string | null;
   url?: string | null;
-  rel?: ('noopener' | 'noreferrer' | 'nofollow')[] | null;
+  rel?: PayloadRelField;
   newTab?: boolean | null;
   umamiEvent?: string | null;
   umamiEventId?: string | null;
@@ -650,7 +669,7 @@ export interface PayloadImageLinkBlock {
   relationship?: (string | null) | PayloadPagesCollection;
   anchor?: string | null;
   url?: string | null;
-  rel?: ('noopener' | 'noreferrer' | 'nofollow')[] | null;
+  rel?: PayloadRelField;
   newTab?: boolean | null;
   umamiEvent?: string | null;
   umamiEventId?: string | null;

@@ -2,14 +2,15 @@ import { slugify } from '@/lib/utils/slugify';
 import type { PayloadLinkGroupField } from '@/payload/payload-types';
 
 export const internalLink = (link: PayloadLinkGroupField) => {
-  if (typeof link.relationship === 'string' || !link.relationship?.slug) {
+  if (typeof link.relationship === 'string' || !link.relationship?.breadcrumbs) {
     return '/';
   }
 
-  const url = link.relationship.slug;
+  const breadcrumbs = link.relationship.breadcrumbs;
+  const url = breadcrumbs[breadcrumbs.length - 1].url;
   const anchor = link.anchor ? `#${link.anchor}` : '';
 
-  return `/${url === 'home' ? '' : url}${anchor}`;
+  return `${url === '/home' ? '/' : url}${anchor}`;
 };
 
 export const linkProps = (link: PayloadLinkGroupField) => {

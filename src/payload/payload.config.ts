@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url';
 
 import { postgresAdapter } from '@payloadcms/db-postgres';
 import { resendAdapter } from '@payloadcms/email-resend';
+import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs';
 import {
   AlignFeature,
   BoldFeature,
@@ -105,6 +106,14 @@ export default buildConfig({
     }
   },
   plugins: [
+    nestedDocsPlugin({
+      collections: ['pages'],
+      parentFieldSlug: 'parent',
+      breadcrumbsFieldSlug: 'breadcrumbs',
+      generateLabel: (_, doc) => doc?.title as string,
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      generateURL: (docs) => docs.reduce((url, doc) => `${url}/${doc?.slug}`, ''),
+    }),
     s3Storage({
       collections: {
         [Media.slug]: true,
