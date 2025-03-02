@@ -4,6 +4,7 @@ import type {
   CollectionBeforeValidateHook,
   CollectionConfig,
   Field,
+  PayloadHandler,
   PayloadRequest,
 } from 'payload';
 
@@ -103,6 +104,60 @@ const afterChangeHook: CollectionAfterChangeHook<PayloadGuestsCollection> = asyn
   return doc;
 };
 
+const rootPostHandler: PayloadHandler = async (req) => {
+  try {
+    if (!hasRole(Role.Admin)({ req })) {
+      return Response.json({ errors: [{ message: 'Unauthorized' }] }, { status: 401 });
+    }
+
+    const { payload } = req;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const data = req.json ? await req.json() : {};
+    const doc = await payload.create({
+      collection: 'guests',
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      data: Object.assign(data, {
+        password: `${env.GUEST_PASSWORD}-party`,
+      }),
+    });
+
+    return Response.json({ message: 'Guest successfully created', doc }, { status: 200 });
+  } catch (error) {
+    return Response.json({ errors: [{ message: JSON.stringify(error) }] }, { status: 500 });
+  }
+};
+
+const reorderPatchHandler: PayloadHandler = async (req) => {
+  try {
+    if (!hasRole(Role.Admin)({ req })) {
+      return Response.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { payload } = req;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const reqDocs: PayloadGuestsCollection[] = req.json
+      ? // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        await req.json().then((data) => data.docs)
+      : [];
+
+    const docs = await Promise.all(
+      reqDocs.map((guest, index: number) =>
+        payload.update({
+          collection: 'guests',
+          id: guest.id,
+          data: {
+            sort: index,
+          },
+        }),
+      ),
+    );
+
+    return Response.json({ message: 'Guests reordered', docs }, { status: 200 });
+  } catch (error) {
+    return Response.json({ errors: [{ message: JSON.stringify(error) }] }, { status: 500 });
+  }
+};
+
 const rsvpOptionField: Partial<Field> = {
   type: 'select',
   interfaceName: 'PayloadRsvpField',
@@ -166,6 +221,18 @@ export const Guests: CollectionConfig<'guests'> = {
     update: async (args) => await hasRoleSelfPartyOrBeforeDeadline(args, Role.Admin),
     delete: hasRole(Role.Admin),
   },
+  endpoints: [
+    {
+      path: '/',
+      method: 'post',
+      handler: rootPostHandler,
+    },
+    {
+      path: '/reorder',
+      method: 'patch',
+      handler: reorderPatchHandler,
+    },
+  ],
   fields: [
     {
       name: 'email',
