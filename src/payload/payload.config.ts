@@ -59,6 +59,9 @@ export default buildConfig({
   db: postgresAdapter({
     pool: {
       connectionString: env.POSTGRES_CONNECTION_STRING,
+      idleTimeoutMillis: 10000,
+      allowExitOnIdle: true,
+      max: 25,
     },
     migrationDir: path.join(dirname, 'migrations'),
     idType: 'uuid',
