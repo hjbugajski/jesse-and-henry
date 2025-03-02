@@ -11,7 +11,7 @@ const Accordion = Root;
 
 const AccordionItem = ({ className, ...props }: ComponentProps<typeof Item>) => (
   <Item
-    className={cn('group border-neutral-variant-50/80 border-b-2 last:border-b-0', className)}
+    className={cn('group border-b-2 border-neutral-variant-50/80 last:border-b-0', className)}
     {...props}
   />
 );
@@ -26,7 +26,7 @@ const AccordionHeader = ({ className, ...props }: ComponentProps<typeof Header>)
 const AccordionTrigger = ({ className, children, ...props }: ComponentProps<typeof Trigger>) => (
   <Trigger
     className={cn(
-      'hover:text-neutral-10 focus:outline-neutral-variant-50/80 flex flex-1 justify-between overflow-clip py-4 text-left text-xl group-first:pt-0 [&[data-state=open]>svg]:rotate-180',
+      'flex flex-1 justify-between overflow-clip py-4 text-left text-xl group-first:pt-0 hover:text-neutral-10 focus:outline-neutral-variant-50/80 [&[data-state=open]>svg]:rotate-180',
       className,
     )}
     {...props}
@@ -39,7 +39,7 @@ const AccordionTrigger = ({ className, children, ...props }: ComponentProps<type
 const AccordionContent = ({ className, children, ...props }: ComponentProps<typeof Content>) => (
   <Content
     className={cn(
-      'data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden',
+      'overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down',
       className,
     )}
     {...props}

@@ -22,11 +22,11 @@ const FormFieldContext = createContext<FormFieldContextValue>({} as FormFieldCon
 const FormField = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->({
-  ...props
-}: ControllerProps<TFieldValues, TName>) => (
+>(
+  props: ControllerProps<TFieldValues, TName>,
+) => (
   <FormFieldContext.Provider value={{ name: props.name }}>
-    <Controller {...props} />
+    <Controller {...props} disabled={props.disabled || undefined} />
   </FormFieldContext.Provider>
 );
 
@@ -96,7 +96,7 @@ const FormDescription = ({ className, ...props }: ComponentProps<'p'>) => {
   return (
     <p
       id={formDescriptionId}
-      className={cn('text-neutral-variant-25 text-sm', className)}
+      className={cn('text-sm text-neutral-variant-25', className)}
       {...props}
     />
   );
@@ -111,7 +111,7 @@ const FormMessage = ({ className, children, ...props }: ComponentProps<'p'>) => 
   }
 
   return (
-    <p id={formMessageId} className={cn('text-danger-25 text-sm', className)} {...props}>
+    <p id={formMessageId} className={cn('text-sm text-danger-25', className)} {...props}>
       {body}
     </p>
   );

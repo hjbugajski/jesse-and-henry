@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 
-export type BaseProps = {
+export interface BaseProps {
   children?: ReactNode;
   className?: string;
   style?: CSSProperties;
-};
+}

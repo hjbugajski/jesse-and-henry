@@ -19,9 +19,11 @@ import {
 import { type PayloadGuestsCollection } from '@/payload/payload-types';
 import { deepMerge } from '@/payload/utils/deep-merge';
 
-const cleanString = (str: string) => str.toLowerCase().replace(/[^a-zA-Z]/g, '');
+function cleanString(str: string) {
+  return str.toLowerCase().replace(/[^a-zA-Z]/g, '');
+}
 
-const generateRandomEmail = async ({ payload }: PayloadRequest) => {
+async function generateRandomEmail({ payload }: PayloadRequest) {
   const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz0123456789', 32);
   const emails = await payload
     .find({ collection: 'guests', pagination: false })
@@ -34,7 +36,7 @@ const generateRandomEmail = async ({ payload }: PayloadRequest) => {
   } while (emails.has(email));
 
   return email;
-};
+}
 
 const beforeValidateHook: CollectionBeforeValidateHook<PayloadGuestsCollection> = async ({
   data,

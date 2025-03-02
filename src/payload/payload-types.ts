@@ -62,12 +62,17 @@ export type PayloadIconField =
       | 'arrowRight'
       | 'borgoCorsignano'
       | 'chevronDown'
+      | 'circleCheck'
+      | 'circleX'
       | 'close'
       | 'externalLink'
       | 'heart'
       | 'help'
       | 'info'
+      | 'logout'
+      | 'maximize'
       | 'menu'
+      | 'minimize'
     )
   | null;
 /**

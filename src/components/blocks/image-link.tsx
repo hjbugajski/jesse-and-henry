@@ -11,10 +11,10 @@ export function ImageLinkBlock({ image, ...link }: PayloadImageLinkBlock) {
       {typeof image === 'string' ? null : (
         <PayloadImage {...image} className="absolute object-cover object-center" />
       )}
-      <div className="bg-neutral-10/50 absolute inset-0 z-0 h-full w-full rounded-xl" />
+      <div className="absolute inset-0 z-0 h-full w-full rounded-xl bg-neutral-10/50" />
       <Link
         {...linkProps(link)}
-        className="drop-shadow-neutral-10 text-neutral-95 hover:text-primary-95 z-10 flex h-full w-full flex-col items-center justify-center gap-4 rounded-xl no-underline drop-shadow-xs"
+        className="drop-shadow-neutral-10 z-10 flex h-full w-full flex-col items-center justify-center gap-4 rounded-xl text-neutral-95 no-underline drop-shadow-xs hover:text-primary-95"
       >
         {link.icon && <Icons name={link.icon} className="h-32 w-32" />}
         <span className="mx-auto max-w-xs text-center font-serif text-xl tracking-wider uppercase">

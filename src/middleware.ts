@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-import { fetchUser } from '@/actions/auth';
+import { fetchGuest, fetchUser } from '@/actions/auth';
 
 export const config = {
   matcher: [
@@ -20,41 +20,44 @@ export const config = {
 export async function middleware(request: NextRequest) {
   const pathName = request.nextUrl.pathname;
   const pathNameArray = pathName.split('/');
+  const lastPathName = pathNameArray.pop();
 
   // protected login page
-  if (pathNameArray.pop() === 'protected') {
+  if (lastPathName === 'protected') {
     const redirectUrl = request.nextUrl.searchParams.get('redirectUrl') || '/';
-    const user = await fetchUser();
+    const [user, guest] = await Promise.all([fetchUser(), fetchGuest()]);
 
-    if (user?.user) {
+    if (user?.user || guest?.user) {
       return NextResponse.redirect(new URL(redirectUrl, request.nextUrl.origin));
     }
   }
 
   // protected page
   if (pathNameArray.includes('protected')) {
-    const user = await fetchUser();
+    const [user, guest] = await Promise.all([fetchUser(), fetchGuest()]);
 
-    if (!user?.user) {
+    if (!user?.user && !guest?.user) {
       return NextResponse.redirect(
         new URL(`/protected?redirectUrl=${encodeURIComponent(pathName)}`, request.nextUrl.origin),
       );
     }
   }
 
-  // if (request.nextUrl.pathname.startsWith('/rsvp/login')) {
-  //   const guest = await fetchGuest();
+  // rsvp login page
+  if (pathName.startsWith('/rsvp/login')) {
+    const guest = await fetchGuest();
 
-  //   if (guest && guest.user) {
-  //     return NextResponse.redirect(new URL('/rsvp', request.nextUrl.origin));
-  //   }
-  // }
+    if (guest?.user) {
+      return NextResponse.redirect(new URL('/rsvp', request.nextUrl.origin));
+    }
+  }
 
-  // if (request.nextUrl.pathname === '/rsvp') {
-  //   const guest = await fetchGuest();
+  // rsvp page
+  if (lastPathName === 'rsvp') {
+    const guest = await fetchGuest();
 
-  //   if (!guest || !guest.user) {
-  //     return NextResponse.redirect(new URL('/rsvp/login', request.nextUrl.origin));
-  //   }
-  // }
+    if (!guest?.user) {
+      return NextResponse.redirect(new URL('/rsvp/login', request.nextUrl.origin));
+    }
+  }
 }

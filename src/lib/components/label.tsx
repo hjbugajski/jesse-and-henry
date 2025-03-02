@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils/cn';
 const Label = ({ className, ...props }: ComponentProps<typeof Root>) => (
   <Root
     className={cn(
-      'text-neutral-variant-25 text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+      'text-sm font-bold tracking-wider text-neutral-variant-25 peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
       className,
     )}
     {...props}

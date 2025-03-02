@@ -9,12 +9,12 @@ const alertVariants = cva(
   {
     variants: {
       color: {
-        neutral: 'text-neutral-25 bg-neutral-90/50',
-        'neutral-variant': 'text-neutral-variant-20 bg-neutral-variant-90/50',
-        primary: 'text-primary-20 bg-primary-90/50',
-        secondary: 'text-secondary-20 bg-secondary-90/50',
-        tertiary: 'text-tertiary-20 bg-tertiary-90/50',
-        danger: 'text-danger-20 bg-danger-90/50',
+        neutral: 'bg-neutral-90/50 text-neutral-25',
+        'neutral-variant': 'bg-neutral-variant-90/50 text-neutral-variant-20',
+        primary: 'bg-primary-90/50 text-primary-20',
+        secondary: 'bg-secondary-90/50 text-secondary-20',
+        tertiary: 'bg-tertiary-90/50 text-tertiary-20',
+        danger: 'bg-danger-90/50 text-danger-20',
       },
     },
     defaultVariants: {
@@ -36,10 +36,7 @@ const AlertBody = ({ className, ...props }: ComponentProps<'div'>) => (
 );
 
 const AlertTitle = ({ className, ...props }: ComponentProps<'h1'>) => (
-  <h1
-    {...props}
-    className={cn('mb-1 font-sans text-base font-bold tracking-wider normal-case', className)}
-  />
+  <h1 {...props} className={cn('mb-1 font-sans text-base font-bold normal-case', className)} />
 );
 
 export { Alert, AlertBody, AlertTitle };

@@ -17,7 +17,7 @@ export const linkConverter: JSXConverter<SerializedLinkNode> = ({
     className={
       overrideClass ||
       cn(
-        'hover:text-neutral-10 focus-visible:ring-neutral-40/50 rounded-md underline underline-offset-4 transition-all focus-visible:no-underline focus-visible:ring-2 focus-visible:outline-hidden',
+        'rounded-md underline underline-offset-4 transition-all hover:text-neutral-10 focus-visible:no-underline focus-visible:ring-2 focus-visible:ring-neutral-40/50 focus-visible:outline-hidden',
         additionalClass,
       )
     }

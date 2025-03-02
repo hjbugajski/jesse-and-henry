@@ -7,12 +7,17 @@ import { IconAlert } from '@/lib/components/icons/alert';
 import { IconArrowRight } from '@/lib/components/icons/arrow-right';
 import { IconBorgoCorsignano } from '@/lib/components/icons/borgo-corsignano';
 import { IconChevronDown } from '@/lib/components/icons/chevron-down';
+import { IconCircleCheck } from '@/lib/components/icons/circle-check';
+import { IconCircleX } from '@/lib/components/icons/circle-x';
 import { IconClose } from '@/lib/components/icons/close';
 import { IconExternalLink } from '@/lib/components/icons/external-link';
 import { IconHeart } from '@/lib/components/icons/heart';
 import { IconHelp } from '@/lib/components/icons/help';
 import { IconInfo } from '@/lib/components/icons/info';
+import { IconLogout } from '@/lib/components/icons/logout';
+import { IconMaximize } from '@/lib/components/icons/maximize';
 import { IconMenu } from '@/lib/components/icons/menu';
+import { IconMinimize } from '@/lib/components/icons/minimize';
 import type { BaseProps } from '@/lib/types/base-props';
 import { cn } from '@/lib/utils/cn';
 import type { PayloadIconField } from '@/payload/payload-types';
@@ -25,12 +30,17 @@ const icons: Record<
   arrowRight: IconArrowRight,
   borgoCorsignano: IconBorgoCorsignano,
   chevronDown: IconChevronDown,
+  circleCheck: IconCircleCheck,
+  circleX: IconCircleX,
   close: IconClose,
   externalLink: IconExternalLink,
   heart: IconHeart,
   help: IconHelp,
   info: IconInfo,
+  logout: IconLogout,
+  maximize: IconMaximize,
   menu: IconMenu,
+  minimize: IconMinimize,
 };
 
 const iconVariants = cva('', {

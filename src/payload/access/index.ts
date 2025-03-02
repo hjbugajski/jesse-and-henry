@@ -1,5 +1,6 @@
-import type { Access, AccessArgs, AccessResult, FieldAccess, Where } from 'payload';
+import type { Access, AccessArgs, AccessResult, FieldAccess } from 'payload';
 
+import { getValue } from '@/lib/utils/get-value';
 import type {
   PayloadGuestsCollection,
   PayloadPagesCollection,
@@ -45,23 +46,40 @@ export function hasAuthAndNotProtectedField(): FieldAccess<PayloadPagesCollectio
   return ({ req: { user }, doc }) => (user ? true : doc?.breadcrumbs?.[0]?.url !== '/protected');
 }
 
-const selfOrPartyQuery = (user: PayloadUsersCollection | PayloadGuestsCollection | null): Where => {
-  const or: Where[] = [{ id: { equals: user?.id } }];
-
-  if (user && 'party' in user) {
-    const partyId = typeof user.party === 'string' ? user.party : user.party?.id;
-
-    or.push({
-      and: [
-        { party: { exists: true } },
-        { party: { not_equals: null } },
-        { party: { equals: partyId } },
-      ],
-    });
+function selfOrPartyQuery(user: PayloadGuestsCollection | null): AccessResult {
+  if (!user) {
+    return false;
   }
 
-  return { or };
-};
+  return {
+    or: [
+      {
+        and: [
+          {
+            party: {
+              exists: true,
+            },
+          },
+          {
+            party: {
+              not_equals: null,
+            },
+          },
+          {
+            party: {
+              equals: getValue(user, 'party.id'),
+            },
+          },
+        ],
+      },
+      {
+        id: {
+          equals: user?.id,
+        },
+      },
+    ],
+  };
+}
 
 export function hasRoleSelfOrParty(...roles: Role[]): Access {
   return ({ req: { user } }) => roleAccess(user, roles) || selfOrPartyQuery(user);
@@ -75,5 +93,5 @@ export async function hasRoleSelfPartyOrBeforeDeadline(
     .findGlobal({ slug: 'config' })
     .then((config) => (config?.rsvpDeadline ? new Date() < new Date(config.rsvpDeadline) : true));
 
-  return roleAccess(user, roles) || (beforeDeadline && selfOrPartyQuery(user));
+  return roleAccess(user, roles) || (beforeDeadline ? selfOrPartyQuery(user) : false);
 }

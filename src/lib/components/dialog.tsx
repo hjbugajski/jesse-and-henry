@@ -42,7 +42,7 @@ const DialogContent = ({ className, children, ...props }: ComponentProps<typeof 
       className={cn('fixed inset-0 z-50 flex w-full items-center justify-center p-4', className)}
       {...props}
     >
-      <div className="bg-neutral-99/75 relative flex w-full max-w-md flex-col rounded-2xl border-2 border-neutral-50/50 p-6 backdrop-blur-md">
+      <div className="relative flex w-full max-w-md flex-col rounded-2xl border-2 border-neutral-50/50 bg-neutral-99/75 p-6 backdrop-blur-md">
         {children}
         <Close asChild>
           <Button className="absolute top-4 right-4" size="icon">
