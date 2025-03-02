@@ -32,7 +32,7 @@ const formSchema = object({
   password: string().required('Password is required'),
 });
 
-export default function ProtectedForm() {
+export function ProtectedForm() {
   const [formState, setFormState] = useState(initialState);
 
   const form = useForm<InferType<typeof formSchema>>({

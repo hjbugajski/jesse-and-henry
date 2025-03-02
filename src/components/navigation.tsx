@@ -123,7 +123,7 @@ export function Navigation({ callToAction, links, showCta }: PayloadNavigationGl
         ref={ref}
         role={open ? 'dialog' : 'navigation'}
         data-state={open ? 'open' : 'closed'}
-        className="bg-neutral-99/50 md-lg:bottom-[unset] md-lg:top-0 fixed right-0 bottom-0 left-0 z-50 flex h-16 flex-row items-center justify-between gap-4 data-[state=closed]:backdrop-blur-md"
+        className="fixed right-0 bottom-0 left-0 z-50 flex h-16 flex-row items-center justify-between gap-4 bg-neutral-99/50 data-[state=closed]:backdrop-blur-md md-lg:top-0 md-lg:bottom-[unset]"
       >
         <FocusScope loop={open} trapped={open} className="w-full outline-none">
           <ul className="flew-row mx-auto flex h-full w-full max-w-7xl items-center gap-4 px-4">
@@ -137,7 +137,7 @@ export function Navigation({ callToAction, links, showCta }: PayloadNavigationGl
               </Link>
             </li>
             {links?.map((link) => (
-              <li key={link.id} className="md-lg:inline-block hidden">
+              <li key={link.id} className="hidden md-lg:inline-block">
                 <Link {...linkProps(link)} className="text-sm no-underline">
                   {link.text}
                 </Link>

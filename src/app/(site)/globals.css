@@ -118,6 +118,27 @@
   /* animations */
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  /* keyframes */
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+
+    to {
+      height: 0;
+    }
+  }
 }
 
 @layer base {
@@ -130,7 +151,7 @@
   }
 
   * {
-    @apply font-sans font-normal tracking-wider;
+    @apply font-sans font-normal antialiased;
   }
 
   *::selection {
@@ -138,7 +159,7 @@
   }
 
   a {
-    @apply hover:text-neutral-10 focus-visible:ring-neutral-40/50 rounded-md underline underline-offset-4 transition-all focus-visible:no-underline focus-visible:ring-2 focus-visible:outline-hidden;
+    @apply rounded-md underline underline-offset-4 transition-all hover:text-neutral-10 focus-visible:no-underline focus-visible:ring-2 focus-visible:ring-neutral-40/50 focus-visible:outline-hidden;
   }
 
   h1,
@@ -147,26 +168,6 @@
   h4,
   h5,
   h6 {
-    @apply font-serif tracking-wider uppercase antialiased;
-  }
-}
-
-@keyframes accordion-down {
-  from {
-    height: 0;
-  }
-
-  to {
-    height: var(--radix-accordion-content-height);
-  }
-}
-
-@keyframes accordion-up {
-  from {
-    height: var(--radix-accordion-content-height);
-  }
-
-  to {
-    height: 0;
+    @apply font-serif tracking-wider uppercase;
   }
 }

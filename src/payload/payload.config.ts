@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url';
 
 import { postgresAdapter } from '@payloadcms/db-postgres';
 import { resendAdapter } from '@payloadcms/email-resend';
+import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs';
 import {
   AlignFeature,
   BoldFeature,
@@ -29,8 +30,12 @@ import sharp from 'sharp';
 import { env } from '@/env/server';
 import { Role } from '@/payload/access';
 import { Faqs } from '@/payload/collections/faqs';
+import { Guests } from '@/payload/collections/guests';
 import { Media } from '@/payload/collections/media';
 import { Pages } from '@/payload/collections/pages';
+import { Parties } from '@/payload/collections/parties';
+import { Relations } from '@/payload/collections/relations';
+import { Sides } from '@/payload/collections/sides';
 import { Users } from '@/payload/collections/users';
 import { richTextLinkFields } from '@/payload/fields/link';
 import { Config } from '@/payload/globals/config';
@@ -48,12 +53,15 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Pages, Faqs, Media],
+  collections: [Pages, Faqs, Media, Guests, Parties, Relations, Sides, Users],
   cors: whitelist,
   csrf: whitelist,
   db: postgresAdapter({
     pool: {
       connectionString: env.POSTGRES_CONNECTION_STRING,
+      idleTimeoutMillis: 10000,
+      allowExitOnIdle: true,
+      max: 25,
     },
     migrationDir: path.join(dirname, 'migrations'),
     idType: 'uuid',
@@ -105,6 +113,14 @@ export default buildConfig({
     }
   },
   plugins: [
+    nestedDocsPlugin({
+      collections: ['pages'],
+      parentFieldSlug: 'parent',
+      breadcrumbsFieldSlug: 'breadcrumbs',
+      generateLabel: (_, doc) => doc?.title as string,
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      generateURL: (docs) => docs.reduce((url, doc) => `${url}/${doc?.slug}`, ''),
+    }),
     s3Storage({
       collections: {
         [Media.slug]: true,

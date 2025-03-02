@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 
-export const pageTitle = (title: string | undefined, metadata: Metadata) =>
-  !title || title?.toLowerCase() === 'home'
-    ? metadata.title
-    : `${title} | ${metadata.title as string}`;
+export function pageTitle(title: string | undefined, metadata: Metadata) {
+  if (!title || title?.toLowerCase() === 'home') {
+    return metadata.title;
+  }
+
+  return `${title} | ${metadata.title as string}`;
+}

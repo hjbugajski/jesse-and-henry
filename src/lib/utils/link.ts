@@ -1,18 +1,19 @@
 import { slugify } from '@/lib/utils/slugify';
 import type { PayloadLinkGroupField } from '@/payload/payload-types';
 
-export const internalLink = (link: PayloadLinkGroupField) => {
-  if (typeof link.relationship === 'string' || !link.relationship?.slug) {
+function internalLink(link: PayloadLinkGroupField) {
+  if (typeof link.relationship === 'string' || !link.relationship?.breadcrumbs?.length) {
     return '/';
   }
 
-  const url = link.relationship.slug;
+  const breadcrumbs = link.relationship.breadcrumbs;
+  const url = breadcrumbs[breadcrumbs.length - 1].url;
   const anchor = link.anchor ? `#${link.anchor}` : '';
 
-  return `/${url === 'home' ? '' : url}${anchor}`;
-};
+  return `${url === '/home' ? '/' : url}${anchor}`;
+}
 
-export const linkProps = (link: PayloadLinkGroupField) => {
+export function linkProps(link: PayloadLinkGroupField) {
   const href = link.type === 'internal' && link.relationship ? internalLink(link) : link.url;
   const rel = link.rel && link.rel.length > 0 ? { rel: link.rel.join(',') } : {};
 
@@ -25,4 +26,4 @@ export const linkProps = (link: PayloadLinkGroupField) => {
     'data-umami-event-id': link.umamiEventId ?? slugify(link.text),
     'data-umami-event-url': href,
   };
-};
+}

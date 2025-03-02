@@ -22,6 +22,14 @@ export const icon: Field = {
       value: 'chevronDown',
     },
     {
+      label: 'Circle check',
+      value: 'circleCheck',
+    },
+    {
+      label: 'Circle x',
+      value: 'circleX',
+    },
+    {
       label: 'Close',
       value: 'close',
     },
@@ -42,8 +50,20 @@ export const icon: Field = {
       value: 'info',
     },
     {
+      label: 'Logout',
+      value: 'logout',
+    },
+    {
+      label: 'Maximize',
+      value: 'maximize',
+    },
+    {
       label: 'Menu',
       value: 'menu',
+    },
+    {
+      label: 'Minimize',
+      value: 'minimize',
     },
   ],
 };

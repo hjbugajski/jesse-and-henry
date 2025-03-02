@@ -23,6 +23,7 @@ let count = 0;
 
 function genId() {
   count = (count + 1) % Number.MAX_VALUE;
+
   return count.toString();
 }
 
@@ -52,7 +53,7 @@ interface State {
 
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
 
-const addToRemoveQueue = (toastId: string) => {
+function addToRemoveQueue(toastId: string) {
   if (toastTimeouts.has(toastId)) {
     return;
   }
@@ -66,9 +67,9 @@ const addToRemoveQueue = (toastId: string) => {
   }, TOAST_REMOVE_DELAY);
 
   toastTimeouts.set(toastId, timeout);
-};
+}
 
-export const reducer = (state: State, action: Action): State => {
+function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'ADD_TOAST':
       return {
@@ -119,7 +120,7 @@ export const reducer = (state: State, action: Action): State => {
         toasts: state.toasts.filter((t) => t.id !== action.toastId),
       };
   }
-};
+}
 
 const listeners: Array<(state: State) => void> = [];
 

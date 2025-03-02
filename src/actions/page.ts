@@ -5,29 +5,31 @@ import { cache } from 'react';
 import { draftMode } from 'next/headers';
 import { getPayload } from 'payload';
 
-import { fetchUser } from '@/actions/auth';
+import { fetchGuest, fetchUser } from '@/actions/auth';
 import config from '@payload-config';
 
-export const queryPage = cache(async ({ slug: segments }: { slug: string[] }) => {
+export const fetchCachedPage = cache(async ({ slug: segments }: { slug: string[] }) => {
   const slugSegments = segments || ['home'];
   const slug = slugSegments[slugSegments.length - 1];
-  const [{ isEnabled: draft }, payload, user] = await Promise.all([
+  const [{ isEnabled: draft }, payload, user, guest] = await Promise.all([
     draftMode(),
     getPayload({ config }),
     fetchUser(),
+    fetchGuest(),
   ]);
+  const auth = user?.user || guest?.user;
   const result = await payload.find({
     collection: 'pages',
     draft,
     pagination: false,
     limit: 1,
-    overrideAccess: user?.user ? false : draft,
+    overrideAccess: auth ? false : draft,
     where: {
       slug: {
         equals: slug,
       },
     },
-    user: user?.user || undefined,
+    user: auth || undefined,
   });
 
   return result.docs?.[0] || null;

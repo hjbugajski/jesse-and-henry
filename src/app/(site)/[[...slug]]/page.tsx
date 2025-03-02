@@ -1,8 +1,7 @@
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { getPayload } from 'payload';
 
-import { fetchUser } from '@/actions/auth';
-import { queryPage } from '@/actions/page';
+import { fetchCachedPage } from '@/actions/page';
 import { metadata } from '@/app/(site)/layout';
 import { RichText } from '@/components/rich-text';
 import type { PageProps } from '@/lib/types/page-props';
@@ -30,7 +29,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
-  const page = await queryPage({ slug });
+  const page = await fetchCachedPage({ slug });
 
   return {
     title: pageTitle(page?.title, metadata),
@@ -40,18 +39,10 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function Page({ params }: PageProps) {
   const { slug } = await params;
-  const page = await queryPage({ slug });
+  const page = await fetchCachedPage({ slug });
 
   if (!page) {
     notFound();
-  }
-
-  if (page.protected) {
-    const user = await fetchUser();
-
-    if (!user?.user) {
-      redirect(`/protected?redirectUrl=${encodeURIComponent(`/${slug?.join('/')}`)}`);
-    }
   }
 
   return <RichText data={page.content} />;

@@ -85,6 +85,7 @@ export const Pages: CollectionConfig<'pages'> = {
   },
   defaultPopulate: {
     slug: true,
+    breadcrumbs: true,
   },
   fields: [
     {
@@ -120,12 +121,48 @@ export const Pages: CollectionConfig<'pages'> = {
       },
     },
     {
-      name: 'protected',
-      type: 'checkbox',
-      defaultValue: false,
+      name: 'parent',
+      type: 'relationship',
+      relationTo: 'pages',
       admin: {
         position: 'sidebar',
       },
+      filterOptions: ({ siblingData }) => ({
+        slug: {
+          // @ts-expect-error – valid field
+          not_equals: siblingData?.slug,
+        },
+      }),
+    },
+    {
+      name: 'breadcrumbs',
+      type: 'array',
+      admin: {
+        hidden: true,
+        position: 'sidebar',
+        readOnly: true,
+        components: {
+          RowLabel: {
+            path: '@/payload/components/row-label.tsx',
+            exportName: 'RowLabel',
+            clientProps: {
+              path: 'label',
+              fallback: 'Breadcrumb',
+            },
+          },
+        },
+      },
+      fields: [
+        {
+          name: 'url',
+          label: 'Path',
+          type: 'text',
+        },
+        {
+          name: 'label',
+          type: 'text',
+        },
+      ],
     },
   ],
 };

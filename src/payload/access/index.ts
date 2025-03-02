@@ -1,6 +1,11 @@
-import type { Access, FieldAccess } from 'payload';
+import type { Access, AccessArgs, AccessResult, FieldAccess } from 'payload';
 
-import type { PayloadUsersCollection } from '@/payload/payload-types';
+import { getValue } from '@/lib/utils/get-value';
+import type {
+  PayloadGuestsCollection,
+  PayloadPagesCollection,
+  PayloadUsersCollection,
+} from '@/payload/payload-types';
 
 export const Role = {
   Admin: 'admin',
@@ -10,8 +15,11 @@ export const Role = {
 
 export type Role = (typeof Role)[keyof typeof Role];
 
-function roleAccess(user: PayloadUsersCollection | null, roles: Role[]): boolean {
-  return roles.some((r) => user?.roles?.includes(r));
+function roleAccess(
+  user: PayloadUsersCollection | PayloadGuestsCollection | null,
+  roles: Role[],
+): boolean {
+  return roles.some((r) => user && 'roles' in user && user.roles.includes(r));
 }
 
 export function hasRole(...roles: Role[]): Access {
@@ -34,7 +42,56 @@ export function hasRoleOrPublished(...roles: Role[]): Access {
   return ({ req: { user } }) => roleAccess(user, roles) || { _status: { equals: 'published' } };
 }
 
-export function hasAuthAndNotProtectedField(): FieldAccess {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  return ({ req: { user }, doc }) => (user ? true : doc?.protected === false);
+export function hasAuthAndNotProtectedField(): FieldAccess<PayloadPagesCollection> {
+  return ({ req: { user }, doc }) => (user ? true : doc?.breadcrumbs?.[0]?.url !== '/protected');
+}
+
+function selfOrPartyQuery(user: PayloadGuestsCollection | null): AccessResult {
+  if (!user) {
+    return false;
+  }
+
+  return {
+    or: [
+      {
+        and: [
+          {
+            party: {
+              exists: true,
+            },
+          },
+          {
+            party: {
+              not_equals: null,
+            },
+          },
+          {
+            party: {
+              equals: getValue(user, 'party.id'),
+            },
+          },
+        ],
+      },
+      {
+        id: {
+          equals: user?.id,
+        },
+      },
+    ],
+  };
+}
+
+export function hasRoleSelfOrParty(...roles: Role[]): Access {
+  return ({ req: { user } }) => roleAccess(user, roles) || selfOrPartyQuery(user);
+}
+
+export async function hasRoleSelfPartyOrBeforeDeadline(
+  { req: { payload, user } }: AccessArgs,
+  ...roles: Role[]
+): Promise<AccessResult> {
+  const beforeDeadline = await payload
+    .findGlobal({ slug: 'config' })
+    .then((config) => (config?.rsvpDeadline ? new Date() < new Date(config.rsvpDeadline) : true));
+
+  return roleAccess(user, roles) || (beforeDeadline ? selfOrPartyQuery(user) : false);
 }
