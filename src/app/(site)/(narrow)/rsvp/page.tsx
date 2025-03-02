@@ -10,6 +10,7 @@ import { LogOutButton } from '@/components/log-out-button';
 import { Alert, AlertBody, AlertTitle } from '@/lib/components/alert';
 import { Button } from '@/lib/components/button';
 import { Icons } from '@/lib/components/icons';
+import { Time } from '@/lib/components/time';
 import type { PageProps } from '@/lib/types/page-props';
 import { pageTitle } from '@/lib/utils/page';
 import type { PayloadConfigGlobal } from '@/payload/payload-types';
@@ -22,12 +23,6 @@ export async function generateMetadata({ params }: PageProps) {
     title: pageTitle(page?.title, metadata),
     description: page?.description || metadata.description,
   };
-}
-
-function formatDate(value: string) {
-  const date = new Date(value);
-
-  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
 function PageToolbar() {
@@ -65,7 +60,8 @@ export default async function Page() {
   }
 
   const { user } = guest;
-  const disableRsvp = config?.rsvpDeadline ? new Date(config.rsvpDeadline) < new Date() : false;
+  // const disableRsvp = config?.rsvpDeadline ? new Date(config.rsvpDeadline) < new Date() : false;
+  const disableRsvp = false;
 
   return (
     <>
@@ -86,7 +82,7 @@ export default async function Page() {
               <>
                 <AlertTitle>
                   {guests.length === 1 ? 'RSVP' : 'RSVPs'} must be submitted by{' '}
-                  <strong>{formatDate(config.rsvpDeadline)}</strong>
+                  <Time dateTime={config.rsvpDeadline} className="font-bold" />
                 </AlertTitle>
                 <p>
                   If we have not received your response by this time, we will have to count you as
