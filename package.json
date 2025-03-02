@@ -9,6 +9,8 @@
     "i:dev:clean": "infisical run pnpm dev:clean",
     "build": "next build",
     "i:build": "infisical run pnpm build",
+    "build:clean": "rm -rf .next && rm -rf next-env.d.ts && pnpm build",
+    "i:build:clean": "infisical run pnpm build:clean",
     "start": "next start",
     "i:start": "infisical run pnpm start",
     "migrate": "payload migrate",
