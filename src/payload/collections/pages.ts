@@ -13,12 +13,27 @@ import { Hero } from '@/payload/blocks/hero';
 import { Section } from '@/payload/blocks/section';
 import type { PayloadPagesCollection } from '@/payload/payload-types';
 
-const useSlug: FieldHook<PayloadPagesCollection, string | undefined, PayloadPagesCollection> = ({
-  operation,
-  siblingData,
-}) => {
+const useSlug: FieldHook<
+  PayloadPagesCollection,
+  string | null | undefined,
+  PayloadPagesCollection
+> = ({ operation, siblingData }) => {
   if (operation === 'create' || operation === 'update') {
     return slugify(siblingData?.title);
+  }
+};
+
+const usePath: FieldHook<
+  PayloadPagesCollection,
+  string | null | undefined,
+  PayloadPagesCollection
+> = ({ operation, siblingData }) => {
+  if (operation === 'create' || operation === 'update') {
+    if (siblingData?.breadcrumbs?.length) {
+      return siblingData.breadcrumbs[siblingData.breadcrumbs.length - 1].url;
+    }
+
+    return `/${slugify(siblingData?.title)}`;
   }
 };
 
@@ -27,18 +42,14 @@ const revalidatePageAfterChange: CollectionAfterChangeHook<PayloadPagesCollectio
   previousDoc,
   req: { payload },
 }) => {
-  if (doc._status === 'published') {
-    const path = doc.slug === 'home' ? '/' : `/${doc.slug}`;
-
-    payload.logger.info(`Revalidating path: ${path}`);
-    revalidatePath(path);
+  if (doc._status === 'published' && doc.path) {
+    payload.logger.info(`Revalidating path: ${doc.path}`);
+    revalidatePath(doc.path);
   }
 
-  if (previousDoc?._status === 'published' && doc._status !== 'published') {
-    const oldPath = previousDoc.slug === 'home' ? '/' : `/${previousDoc.slug}`;
-
-    payload.logger.info(`Revalidating previous path: ${oldPath}`);
-    revalidatePath(oldPath);
+  if (previousDoc?._status === 'published' && doc._status !== 'published' && previousDoc.path) {
+    payload.logger.info(`Revalidating previous path: ${previousDoc.path}`);
+    revalidatePath(previousDoc.path);
   }
 
   return doc;
@@ -48,10 +59,8 @@ export const revalidatePageAfterDelete: CollectionAfterDeleteHook<PayloadPagesCo
   doc,
   req: { context },
 }) => {
-  if (!context.disableRevalidate) {
-    const path = doc?.slug === 'home' ? '/' : `/${doc?.slug}`;
-
-    revalidatePath(path);
+  if (!context.disableRevalidate && doc.path) {
+    revalidatePath(doc.path);
   }
 
   return doc;
@@ -63,15 +72,11 @@ export const Pages: CollectionConfig<'pages'> = {
     interface: 'PayloadPagesCollection',
   },
   versions: {
-    drafts: {
-      autosave: {
-        interval: 350,
-      },
-    },
+    drafts: true,
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'slug', '_status', 'protected', 'updatedAt'],
+    defaultColumns: ['title', 'path', '_status', 'protected', 'updatedAt'],
   },
   access: {
     read: hasRoleOrPublished(Role.Admin, Role.Editor),
@@ -85,6 +90,7 @@ export const Pages: CollectionConfig<'pages'> = {
   },
   defaultPopulate: {
     slug: true,
+    path: true,
     breadcrumbs: true,
   },
   fields: [
@@ -111,13 +117,25 @@ export const Pages: CollectionConfig<'pages'> = {
     {
       name: 'slug',
       type: 'text',
-      unique: true,
       admin: {
         position: 'sidebar',
         readOnly: true,
       },
       hooks: {
         beforeValidate: [useSlug],
+      },
+    },
+    {
+      name: 'path',
+      type: 'text',
+      unique: true,
+      index: true,
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+      },
+      hooks: {
+        beforeValidate: [usePath],
       },
     },
     {
@@ -128,9 +146,9 @@ export const Pages: CollectionConfig<'pages'> = {
         position: 'sidebar',
       },
       filterOptions: ({ siblingData }) => ({
-        slug: {
+        path: {
           // @ts-expect-error – valid field
-          not_equals: siblingData?.slug,
+          not_equals: siblingData?.path,
         },
       }),
     },

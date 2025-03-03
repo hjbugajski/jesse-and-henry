@@ -256,6 +256,7 @@ export interface PayloadPagesCollection {
     [k: string]: unknown;
   } | null;
   slug?: string | null;
+  path?: string | null;
   parent?: (string | null) | PayloadPagesCollection;
   breadcrumbs?:
     | {
@@ -527,6 +528,7 @@ export interface PagesSelect<T extends boolean = true> {
   description?: T;
   content?: T;
   slug?: T;
+  path?: T;
   parent?: T;
   breadcrumbs?:
     | T

@@ -17,11 +17,11 @@ export async function generateStaticParams() {
       pagination: false,
       overrideAccess: false,
       select: {
-        slug: true,
+        path: true,
       },
     });
 
-    return pages.docs.map(({ slug }) => ({ slug: [slug] }));
+    return pages.docs.map(({ path }) => ({ slug: path?.split('/')?.slice(1) || undefined }));
   } catch {
     return [{ slug: undefined }];
   }

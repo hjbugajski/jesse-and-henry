@@ -10,7 +10,6 @@ import config from '@payload-config';
 
 export const fetchCachedPage = cache(async ({ slug: segments }: { slug: string[] }) => {
   const slugSegments = segments || ['home'];
-  const slug = slugSegments[slugSegments.length - 1];
   const [{ isEnabled: draft }, payload, user, guest] = await Promise.all([
     draftMode(),
     getPayload({ config }),
@@ -25,8 +24,8 @@ export const fetchCachedPage = cache(async ({ slug: segments }: { slug: string[]
     limit: 1,
     overrideAccess: auth ? false : draft,
     where: {
-      slug: {
-        equals: slug,
+      path: {
+        equals: `/${slugSegments.join('/')}`,
       },
     },
     user: auth || undefined,
