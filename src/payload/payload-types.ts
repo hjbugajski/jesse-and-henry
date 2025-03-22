@@ -128,6 +128,7 @@ export type SupportedTimezones =
   | 'Asia/Singapore'
   | 'Asia/Tokyo'
   | 'Asia/Seoul'
+  | 'Australia/Brisbane'
   | 'Australia/Sydney'
   | 'Pacific/Guam'
   | 'Pacific/Noumea'
@@ -255,9 +256,9 @@ export interface PayloadPagesCollection {
     };
     [k: string]: unknown;
   } | null;
+  parent?: (string | null) | PayloadPagesCollection;
   slug?: string | null;
   path?: string | null;
-  parent?: (string | null) | PayloadPagesCollection;
   breadcrumbs?:
     | {
         url?: string | null;
@@ -527,9 +528,9 @@ export interface PagesSelect<T extends boolean = true> {
   title?: T;
   description?: T;
   content?: T;
+  parent?: T;
   slug?: T;
   path?: T;
-  parent?: T;
   breadcrumbs?:
     | T
     | {
