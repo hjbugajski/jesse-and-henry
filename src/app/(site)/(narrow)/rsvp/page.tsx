@@ -60,8 +60,7 @@ export default async function Page() {
   }
 
   const { user } = guest;
-  // const disableRsvp = config?.rsvpDeadline ? new Date(config.rsvpDeadline) < new Date() : false;
-  const disableRsvp = false;
+  const disableRsvp = config?.rsvpDeadline ? new Date(config.rsvpDeadline) < new Date() : false;
 
   return (
     <>

@@ -13,28 +13,41 @@ import { Hero } from '@/payload/blocks/hero';
 import { Section } from '@/payload/blocks/section';
 import type { PayloadPagesCollection } from '@/payload/payload-types';
 
-const useSlug: FieldHook<
+const setSlug: FieldHook<
   PayloadPagesCollection,
   string | null | undefined,
   PayloadPagesCollection
-> = ({ operation, siblingData }) => {
+> = ({ data, operation }) => {
   if (operation === 'create' || operation === 'update') {
-    return slugify(siblingData?.title);
+    return slugify(data?.title);
   }
 };
 
-const usePath: FieldHook<
-  PayloadPagesCollection,
-  string | null | undefined,
-  PayloadPagesCollection
-> = ({ operation, siblingData }) => {
-  if (operation === 'create' || operation === 'update') {
-    if (siblingData?.breadcrumbs?.length) {
-      return siblingData.breadcrumbs[siblingData.breadcrumbs.length - 1].url;
-    }
-
-    return `/${slugify(siblingData?.title)}`;
+const setPath: CollectionAfterChangeHook<PayloadPagesCollection> = ({ context, doc, req }) => {
+  if (!doc?.title || !doc?.breadcrumbs?.length || context?.ignoreSetSlugAndPath) {
+    return doc;
   }
+
+  const slug = slugify(doc.title);
+  const path = doc.breadcrumbs?.length
+    ? doc.breadcrumbs[doc.breadcrumbs.length - 1].url
+    : `/${slug}`;
+
+  if (doc.path === path && doc.slug === slug) {
+    return doc;
+  }
+
+  return req.payload.update({
+    collection: 'pages',
+    id: doc.id,
+    data: {
+      path,
+    },
+    context: {
+      ignoreSetSlugAndPath: true,
+    },
+    req,
+  });
 };
 
 const revalidatePageAfterChange: CollectionAfterChangeHook<PayloadPagesCollection> = ({
@@ -44,11 +57,21 @@ const revalidatePageAfterChange: CollectionAfterChangeHook<PayloadPagesCollectio
 }) => {
   if (doc._status === 'published' && doc.path) {
     payload.logger.info(`Revalidating path: ${doc.path}`);
+
+    if (doc.path === '/home') {
+      revalidatePath('/');
+    }
+
     revalidatePath(doc.path);
   }
 
   if (previousDoc?._status === 'published' && doc._status !== 'published' && previousDoc.path) {
     payload.logger.info(`Revalidating previous path: ${previousDoc.path}`);
+
+    if (doc.path === '/home') {
+      revalidatePath('/');
+    }
+
     revalidatePath(previousDoc.path);
   }
 
@@ -57,9 +80,15 @@ const revalidatePageAfterChange: CollectionAfterChangeHook<PayloadPagesCollectio
 
 export const revalidatePageAfterDelete: CollectionAfterDeleteHook<PayloadPagesCollection> = ({
   doc,
-  req: { context },
+  req: { context, payload },
 }) => {
   if (!context.disableRevalidate && doc.path) {
+    payload.logger.info(`Revalidating path: ${doc.path}`);
+
+    if (doc.path === '/home') {
+      revalidatePath('/');
+    }
+
     revalidatePath(doc.path);
   }
 
@@ -85,7 +114,7 @@ export const Pages: CollectionConfig<'pages'> = {
     delete: hasRole(Role.Admin),
   },
   hooks: {
-    afterChange: [revalidatePageAfterChange],
+    afterChange: [setPath, revalidatePageAfterChange],
     afterDelete: [revalidatePageAfterDelete],
   },
   defaultPopulate: {
@@ -115,30 +144,6 @@ export const Pages: CollectionConfig<'pages'> = {
       }),
     },
     {
-      name: 'slug',
-      type: 'text',
-      admin: {
-        position: 'sidebar',
-        readOnly: true,
-      },
-      hooks: {
-        beforeValidate: [useSlug],
-      },
-    },
-    {
-      name: 'path',
-      type: 'text',
-      unique: true,
-      index: true,
-      admin: {
-        position: 'sidebar',
-        readOnly: true,
-      },
-      hooks: {
-        beforeValidate: [usePath],
-      },
-    },
-    {
       name: 'parent',
       type: 'relationship',
       relationTo: 'pages',
@@ -151,6 +156,27 @@ export const Pages: CollectionConfig<'pages'> = {
           not_equals: siblingData?.path,
         },
       }),
+    },
+    {
+      name: 'slug',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+      },
+      hooks: {
+        beforeValidate: [setSlug],
+      },
+    },
+    {
+      name: 'path',
+      type: 'text',
+      unique: true,
+      index: true,
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+      },
     },
     {
       name: 'breadcrumbs',
