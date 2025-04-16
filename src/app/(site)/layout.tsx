@@ -6,9 +6,9 @@ import { fetchCachedGlobal } from '@/actions/globals';
 import { Footer } from '@/components/footer';
 import { Navigation } from '@/components/navigation';
 import { env } from '@/env/client';
-import { Toaster } from '@/lib/providers/toaster';
 import { cn } from '@/lib/utils/cn';
 import type { PayloadNavigationGlobal } from '@/payload/payload-types';
+import { Toaster } from '@/providers/toaster';
 
 import './globals.css';
 
