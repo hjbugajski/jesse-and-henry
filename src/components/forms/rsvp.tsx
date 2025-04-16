@@ -20,8 +20,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 import { Icons } from '@/icons';
-import { useToast } from '@/lib/hooks/use-toast';
 import type { ActionState } from '@/lib/types/action-state';
 import { cn } from '@/lib/utils/cn';
 import type { PayloadGuestsCollection } from '@/payload/payload-types';

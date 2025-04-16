@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
-import { useToast } from '@/lib/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import type { ActionState } from '@/lib/types/action-state';
 
 const initialState: ActionState = {

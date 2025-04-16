@@ -5,8 +5,8 @@ import { useState } from 'react';
 import { fetchLogout } from '@/actions/auth';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+import { useToast } from '@/hooks/use-toast';
 import { Icons } from '@/icons';
-import { useToast } from '@/lib/hooks/use-toast';
 import type { AuthCollection } from '@/lib/types/auth-collection';
 
 interface Props {
