@@ -3,8 +3,8 @@
 import { useState } from 'react';
 
 import { fetchLogout } from '@/actions/auth';
+import { Icons } from '@/icons';
 import { Button } from '@/lib/components/button';
-import { Icons } from '@/lib/components/icons';
 import { Spinner } from '@/lib/components/spinner';
 import { useToast } from '@/lib/hooks/use-toast';
 import type { AuthCollection } from '@/lib/types/auth-collection';

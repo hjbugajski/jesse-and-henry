@@ -3,7 +3,7 @@ import type { ComponentProps } from 'react';
 import { Close, Description, Provider, Root, Title, Viewport } from '@radix-ui/react-toast';
 import { type VariantProps, cva } from 'class-variance-authority';
 
-import { Icons } from '@/lib/components/icons';
+import { Icons } from '@/icons';
 import { cn } from '@/lib/utils/cn';
 
 const ToastProvider = Provider;

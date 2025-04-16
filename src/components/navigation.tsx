@@ -34,8 +34,8 @@ import { useEffect, useRef, useState } from 'react';
 import { FocusScope } from '@radix-ui/react-focus-scope';
 import Link from 'next/link';
 
+import { Icons } from '@/icons';
 import { Button } from '@/lib/components/button';
-import { Icons } from '@/lib/components/icons';
 import { linkProps } from '@/lib/utils/link';
 import type { PayloadNavigationGlobal } from '@/payload/payload-types';
 

@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { type InferType, mixed, object, string } from 'yup';
 
 import { updateGuest } from '@/actions/guests';
+import { Icons } from '@/icons';
 import { Button } from '@/lib/components/button';
 import {
   Form,
@@ -17,7 +18,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/lib/components/form';
-import { Icons } from '@/lib/components/icons';
 import { Input } from '@/lib/components/input';
 import { Spinner } from '@/lib/components/spinner';
 import { Textarea } from '@/lib/components/textarea';

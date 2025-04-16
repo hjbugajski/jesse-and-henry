@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { Icons } from '@/lib/components/icons';
+import { Icons } from '@/icons';
 
 export function Footer() {
   return (

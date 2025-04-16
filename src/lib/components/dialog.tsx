@@ -13,8 +13,8 @@ import {
   Trigger,
 } from '@radix-ui/react-dialog';
 
+import { Icons } from '@/icons';
 import { Button } from '@/lib/components/button';
-import { Icons } from '@/lib/components/icons';
 import { cn } from '@/lib/utils/cn';
 
 const Dialog = Root;
