@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { useToast } from '@/hooks/use-toast';
 import { Icons } from '@/icons';
-import type { AuthCollection } from '@/lib/types/auth-collection';
+import type { AuthCollection } from '@/types/auth-collection';
 
 interface Props {
   collection: AuthCollection;

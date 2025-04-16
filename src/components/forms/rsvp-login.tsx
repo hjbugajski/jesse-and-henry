@@ -21,7 +21,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
 import { useToast } from '@/hooks/use-toast';
-import type { ActionState } from '@/lib/types/action-state';
+import type { ActionState } from '@/types/action-state';
 
 const initialState: ActionState = {
   status: 'idle',

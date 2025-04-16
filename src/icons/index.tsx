@@ -18,9 +18,9 @@ import { IconLogout } from '@/icons/logout';
 import { IconMaximize } from '@/icons/maximize';
 import { IconMenu } from '@/icons/menu';
 import { IconMinimize } from '@/icons/minimize';
-import type { BaseProps } from '@/lib/types/base-props';
 import { cn } from '@/lib/utils/cn';
 import type { PayloadIconField } from '@/payload/payload-types';
+import type { BaseProps } from '@/types/base-props';
 
 const icons: Record<
   NonNullable<PayloadIconField>,
