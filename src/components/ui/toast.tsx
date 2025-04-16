@@ -4,7 +4,7 @@ import { Close, Description, Provider, Root, Title, Viewport } from '@radix-ui/r
 import { type VariantProps, cva } from 'class-variance-authority';
 
 import { Icons } from '@/icons';
-import { cn } from '@/lib/utils/cn';
+import { cn } from '@/utils/cn';
 
 const ToastProvider = Provider;
 

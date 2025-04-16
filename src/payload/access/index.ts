@@ -1,11 +1,11 @@
 import type { Access, AccessArgs, AccessResult, FieldAccess } from 'payload';
 
-import { getValue } from '@/lib/utils/get-value';
 import type {
   PayloadGuestsCollection,
   PayloadPagesCollection,
   PayloadUsersCollection,
 } from '@/payload/payload-types';
+import { getValue } from '@/utils/get-value';
 
 export const Role = {
   Admin: 'admin',

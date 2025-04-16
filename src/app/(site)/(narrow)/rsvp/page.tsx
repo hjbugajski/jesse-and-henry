@@ -11,9 +11,9 @@ import { Alert, AlertBody, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Time } from '@/components/ui/time';
 import { Icons } from '@/icons';
-import { pageTitle } from '@/lib/utils/page';
 import type { PayloadConfigGlobal } from '@/payload/payload-types';
 import type { PageProps } from '@/types/page-props';
+import { pageTitle } from '@/utils/page';
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;

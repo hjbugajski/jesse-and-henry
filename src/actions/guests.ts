@@ -1,10 +1,10 @@
 'use server';
 
 import { env } from '@/env/server';
-import { getCookieValue } from '@/lib/utils/cookies';
 import type { PayloadGuestsCollection } from '@/payload/payload-types';
 import type { ActionState } from '@/types/action-state';
 import type { PayloadCollectionsGetApi, PayloadCollectionsPatchApi } from '@/types/payload-api';
+import { getCookieValue } from '@/utils/cookies';
 
 const SERVER_API_URL = env.SERVER_URL + '/api';
 

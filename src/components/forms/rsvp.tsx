@@ -22,9 +22,9 @@ import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Icons } from '@/icons';
-import { cn } from '@/lib/utils/cn';
 import type { PayloadGuestsCollection } from '@/payload/payload-types';
 import type { ActionState } from '@/types/action-state';
+import { cn } from '@/utils/cn';
 
 const rsvpArray = ['rsvpRehearsalDinner', 'rsvpWeddingDay', 'rsvpPoolDay'];
 

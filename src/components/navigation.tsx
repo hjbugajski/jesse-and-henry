@@ -36,8 +36,8 @@ import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/icons';
-import { linkProps } from '@/lib/utils/link';
 import type { PayloadNavigationGlobal } from '@/payload/payload-types';
+import { linkProps } from '@/utils/link';
 
 function createFocusGuard() {
   const element = document.createElement('span');

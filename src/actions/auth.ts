@@ -3,10 +3,10 @@
 import { redirect } from 'next/navigation';
 
 import { env } from '@/env/server';
-import { deleteCookie, getCookieValue, setCookie } from '@/lib/utils/cookies';
 import type { PayloadGuestsCollection, PayloadUsersCollection } from '@/payload/payload-types';
 import type { ActionState } from '@/types/action-state';
 import type { AuthCollection } from '@/types/auth-collection';
+import { deleteCookie, getCookieValue, setCookie } from '@/utils/cookies';
 
 interface PayloadApiMe<T = any> {
   collection: string;

@@ -2,7 +2,7 @@ import type { ComponentProps } from 'react';
 
 import { type VariantProps, cva } from 'class-variance-authority';
 
-import { cn } from '@/lib/utils/cn';
+import { cn } from '@/utils/cn';
 
 const alertVariants = cva(
   'relative rounded-xl py-4 pr-4 pl-12 text-left text-sm [&>svg]:absolute [&>svg]:top-4.75 [&>svg]:left-4.75 [&>svg]:size-4.5',

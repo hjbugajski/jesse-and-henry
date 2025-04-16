@@ -2,8 +2,8 @@ import Link from 'next/link';
 
 import { PayloadImage } from '@/components/ui/payload-image';
 import { Icons } from '@/icons';
-import { linkProps } from '@/lib/utils/link';
 import type { PayloadImageLinkBlock } from '@/payload/payload-types';
+import { linkProps } from '@/utils/link';
 
 export function ImageLinkBlock({ image, ...link }: PayloadImageLinkBlock) {
   return (

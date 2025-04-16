@@ -15,7 +15,7 @@ import {
 
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/icons';
-import { cn } from '@/lib/utils/cn';
+import { cn } from '@/utils/cn';
 
 const Dialog = Root;
 

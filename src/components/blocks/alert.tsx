@@ -4,8 +4,8 @@ import { RichText } from '@/components/rich-text';
 import { Alert, AlertBody, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/icons';
-import { linkProps } from '@/lib/utils/link';
 import type { PayloadAlertBlock } from '@/payload/payload-types';
+import { linkProps } from '@/utils/link';
 
 export function AlertBlock(props: PayloadAlertBlock) {
   const { action, color, content, heading, icon, link } = props;
