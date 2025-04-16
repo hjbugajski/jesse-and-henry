@@ -4,8 +4,8 @@ import { getPayload } from 'payload';
 import { fetchCachedPage } from '@/actions/page';
 import { metadata } from '@/app/(site)/layout';
 import { RichText } from '@/components/rich-text';
-import type { PageProps } from '@/lib/types/page-props';
-import { pageTitle } from '@/lib/utils/page';
+import type { PageProps } from '@/types/page-props';
+import { pageTitle } from '@/utils/page';
 import config from '@payload-config';
 
 export async function generateStaticParams() {

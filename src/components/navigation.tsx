@@ -34,10 +34,10 @@ import { useEffect, useRef, useState } from 'react';
 import { FocusScope } from '@radix-ui/react-focus-scope';
 import Link from 'next/link';
 
-import { Button } from '@/lib/components/button';
-import { Icons } from '@/lib/components/icons';
-import { linkProps } from '@/lib/utils/link';
+import { Button } from '@/components/ui/button';
+import { Icons } from '@/icons';
 import type { PayloadNavigationGlobal } from '@/payload/payload-types';
+import { linkProps } from '@/utils/link';
 
 function createFocusGuard() {
   const element = document.createElement('span');

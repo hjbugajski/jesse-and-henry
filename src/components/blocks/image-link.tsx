@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
-import { Icons } from '@/lib/components/icons';
-import { PayloadImage } from '@/lib/components/payload-image';
-import { linkProps } from '@/lib/utils/link';
+import { PayloadImage } from '@/components/ui/payload-image';
+import { Icons } from '@/icons';
 import type { PayloadImageLinkBlock } from '@/payload/payload-types';
+import { linkProps } from '@/utils/link';
 
 export function ImageLinkBlock({ image, ...link }: PayloadImageLinkBlock) {
   return (
@@ -14,7 +14,7 @@ export function ImageLinkBlock({ image, ...link }: PayloadImageLinkBlock) {
       <div className="absolute inset-0 z-0 h-full w-full rounded-xl bg-neutral-10/50" />
       <Link
         {...linkProps(link)}
-        className="drop-shadow-neutral-10 z-10 flex h-full w-full flex-col items-center justify-center gap-4 rounded-xl text-neutral-95 no-underline drop-shadow-xs hover:text-primary-95"
+        className="z-10 flex h-full w-full flex-col items-center justify-center gap-4 rounded-xl text-neutral-95 no-underline drop-shadow-xs drop-shadow-neutral-10 hover:text-primary-95"
       >
         {link.icon && <Icons name={link.icon} className="h-32 w-32" />}
         <span className="mx-auto max-w-xs text-center font-serif text-xl tracking-wider uppercase">

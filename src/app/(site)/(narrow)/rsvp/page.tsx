@@ -7,13 +7,13 @@ import { fetchCachedPage } from '@/actions/page';
 import { metadata } from '@/app/(site)/layout';
 import { RsvpForm } from '@/components/forms/rsvp';
 import { LogOutButton } from '@/components/log-out-button';
-import { Alert, AlertBody, AlertTitle } from '@/lib/components/alert';
-import { Button } from '@/lib/components/button';
-import { Icons } from '@/lib/components/icons';
-import { Time } from '@/lib/components/time';
-import type { PageProps } from '@/lib/types/page-props';
-import { pageTitle } from '@/lib/utils/page';
+import { Alert, AlertBody, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Time } from '@/components/ui/time';
+import { Icons } from '@/icons';
 import type { PayloadConfigGlobal } from '@/payload/payload-types';
+import type { PageProps } from '@/types/page-props';
+import { pageTitle } from '@/utils/page';
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;

@@ -1,4 +1,4 @@
-import { PayloadImage } from '@/lib/components/payload-image';
+import { PayloadImage } from '@/components/ui/payload-image';
 import type { PayloadGalleryBlock } from '@/payload/payload-types';
 
 export function GalleryBlock({ images }: PayloadGalleryBlock) {

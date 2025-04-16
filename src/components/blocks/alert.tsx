@@ -1,11 +1,11 @@
 import Link from 'next/link';
 
 import { RichText } from '@/components/rich-text';
-import { Alert, AlertBody, AlertTitle } from '@/lib/components/alert';
-import { Button } from '@/lib/components/button';
-import { Icons } from '@/lib/components/icons';
-import { linkProps } from '@/lib/utils/link';
+import { Alert, AlertBody, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Icons } from '@/icons';
 import type { PayloadAlertBlock } from '@/payload/payload-types';
+import { linkProps } from '@/utils/link';
 
 export function AlertBlock(props: PayloadAlertBlock) {
   const { action, color, content, heading, icon, link } = props;

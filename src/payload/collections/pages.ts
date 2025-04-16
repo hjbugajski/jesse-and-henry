@@ -7,11 +7,11 @@ import type {
   FieldHook,
 } from 'payload';
 
-import { slugify } from '@/lib/utils/slugify';
 import { Role, hasAuthAndNotProtectedField, hasRole, hasRoleOrPublished } from '@/payload/access';
 import { Hero } from '@/payload/blocks/hero';
 import { Section } from '@/payload/blocks/section';
 import type { PayloadPagesCollection } from '@/payload/payload-types';
+import { slugify } from '@/utils/slugify';
 
 const setSlug: FieldHook<
   PayloadPagesCollection,

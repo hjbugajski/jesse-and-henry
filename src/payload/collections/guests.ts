@@ -9,7 +9,6 @@ import type {
 } from 'payload';
 
 import { env } from '@/env/server';
-import { getValue } from '@/lib/utils/get-value';
 import {
   Role,
   hasRole,
@@ -19,6 +18,7 @@ import {
 } from '@/payload/access';
 import { type PayloadGuestsCollection } from '@/payload/payload-types';
 import { deepMerge } from '@/payload/utils/deep-merge';
+import { getValue } from '@/utils/get-value';
 
 function cleanString(str: string) {
   return str.toLowerCase().replace(/[^a-zA-Z]/g, '');

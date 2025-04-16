@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { type InferType, mixed, object, string } from 'yup';
 
 import { updateGuest } from '@/actions/guests';
-import { Button } from '@/lib/components/button';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -16,15 +16,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/lib/components/form';
-import { Icons } from '@/lib/components/icons';
-import { Input } from '@/lib/components/input';
-import { Spinner } from '@/lib/components/spinner';
-import { Textarea } from '@/lib/components/textarea';
-import { useToast } from '@/lib/hooks/use-toast';
-import type { ActionState } from '@/lib/types/action-state';
-import { cn } from '@/lib/utils/cn';
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/ui/spinner';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
+import { Icons } from '@/icons';
 import type { PayloadGuestsCollection } from '@/payload/payload-types';
+import type { ActionState } from '@/types/action-state';
+import { cn } from '@/utils/cn';
 
 const rsvpArray = ['rsvpRehearsalDinner', 'rsvpWeddingDay', 'rsvpPoolDay'];
 
