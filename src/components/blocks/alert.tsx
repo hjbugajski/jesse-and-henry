@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
 import { RichText } from '@/components/rich-text';
+import { Alert, AlertBody, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 import { Icons } from '@/icons';
-import { Alert, AlertBody, AlertTitle } from '@/lib/components/alert';
-import { Button } from '@/lib/components/button';
 import { linkProps } from '@/lib/utils/link';
 import type { PayloadAlertBlock } from '@/payload/payload-types';
 

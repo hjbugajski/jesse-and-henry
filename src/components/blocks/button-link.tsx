@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
+import { Button } from '@/components/ui/button';
 import { Icons } from '@/icons';
-import { Button } from '@/lib/components/button';
 import { linkProps } from '@/lib/utils/link';
 import type { PayloadButtonLinkBlock } from '@/payload/payload-types';
 

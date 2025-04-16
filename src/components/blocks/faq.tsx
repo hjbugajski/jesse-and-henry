@@ -5,7 +5,7 @@ import {
   AccordionHeader,
   AccordionItem,
   AccordionTrigger,
-} from '@/lib/components/accordian';
+} from '@/components/ui/accordian';
 import type { PayloadFaqBlock } from '@/payload/payload-types';
 
 export function FaqBlock({ faqs }: PayloadFaqBlock) {

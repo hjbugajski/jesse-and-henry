@@ -9,7 +9,7 @@ import type { InferType } from 'yup';
 import { object, string } from 'yup';
 
 import { fetchUserLogin } from '@/actions/auth';
-import { Button } from '@/lib/components/button';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -17,9 +17,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/lib/components/form';
-import { Input } from '@/lib/components/input';
-import { Spinner } from '@/lib/components/spinner';
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/ui/spinner';
 import { useToast } from '@/lib/hooks/use-toast';
 import type { ActionState } from '@/lib/types/action-state';
 

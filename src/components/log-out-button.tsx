@@ -3,9 +3,9 @@
 import { useState } from 'react';
 
 import { fetchLogout } from '@/actions/auth';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
 import { Icons } from '@/icons';
-import { Button } from '@/lib/components/button';
-import { Spinner } from '@/lib/components/spinner';
 import { useToast } from '@/lib/hooks/use-toast';
 import type { AuthCollection } from '@/lib/types/auth-collection';
 

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
+import { PayloadImage } from '@/components/ui/payload-image';
 import { Icons } from '@/icons';
-import { PayloadImage } from '@/lib/components/payload-image';
 import { linkProps } from '@/lib/utils/link';
 import type { PayloadImageLinkBlock } from '@/payload/payload-types';
 
