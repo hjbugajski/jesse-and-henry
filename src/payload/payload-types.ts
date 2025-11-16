@@ -500,10 +500,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: string | PayloadUsersCollection;
-      } | null)
-    | ({
-        relationTo: 'payload-kv';
-        value: string | PayloadKv;
       } | null);
   globalSlug?: string | null;
   user:
