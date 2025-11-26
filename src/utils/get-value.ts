@@ -23,7 +23,7 @@ type ValueAtPath<T, Path extends string> = T extends object
 export function getValue<T, P extends PathsOf<ObjectPart<T>>>(
   value: T | null | undefined,
   path: P,
-): ValueAtPath<ObjectPart<T>, P> | null | undefined;
+): ValueAtPath<ObjectPart<T>, P> | null;
 
 export function getValue<T, K extends string & keyof T>(
   value: T | null | undefined,
