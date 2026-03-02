@@ -17,7 +17,7 @@ export const config = {
   ],
 };
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const pathName = request.nextUrl.pathname;
   const pathNameArray = pathName.split('/');
   const lastPathName = pathNameArray.pop();
