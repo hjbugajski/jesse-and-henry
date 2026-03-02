@@ -73,8 +73,10 @@ export function RsvpLoginForm() {
 
   return (
     <Form {...form}>
-      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full flex-col gap-4 text-left">
+      <form
+        onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
+        className="flex w-full flex-col gap-4 text-left"
+      >
         <FormField
           control={form.control}
           name="first"

@@ -46,7 +46,9 @@ export function hasAuthAndNotProtectedField(): FieldAccess<PayloadPagesCollectio
   return ({ req: { user }, doc }) => (user ? true : doc?.breadcrumbs?.[0]?.url !== '/protected');
 }
 
-function selfOrPartyQuery(user: PayloadGuestsCollection | null): AccessResult {
+function selfOrPartyQuery(
+  user: PayloadGuestsCollection | PayloadUsersCollection | null,
+): AccessResult {
   if (!user) {
     return false;
   }

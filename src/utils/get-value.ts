@@ -1,3 +1,7 @@
+function isIndexable(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
 type ObjectPart<T> = T extends object ? T : never;
 
 type PathsOf<T> = T extends object
@@ -30,7 +34,7 @@ export function getValue<T, K extends string & keyof T>(
   path: K,
 ): T[K] | null | undefined;
 
-export function getValue(value: any, path: string): any {
+export function getValue(value: unknown, path: string): unknown {
   if (value === null || value === undefined) {
     return undefined;
   }
@@ -40,16 +44,14 @@ export function getValue(value: any, path: string): any {
   }
 
   const keys = path.split('.');
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  let result = value;
+  let result: unknown = value;
 
   for (const key of keys) {
     if (result === null || result === undefined) {
       return result;
     }
 
-    if (typeof result === 'object') {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+    if (isIndexable(result)) {
       result = result[key];
     } else {
       return result;

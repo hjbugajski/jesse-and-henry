@@ -1,12 +1,13 @@
 import { notFound } from 'next/navigation';
 import { getPayload } from 'payload';
 
+import config from '@payload-config';
+
 import { fetchCachedPage } from '@/actions/page';
 import { metadata } from '@/app/(site)/layout';
 import { RichText } from '@/components/rich-text';
 import type { PageProps } from '@/types/page-props';
 import { pageTitle } from '@/utils/page';
-import config from '@payload-config';
 
 export async function generateStaticParams() {
   try {

@@ -8,14 +8,14 @@ import type { ActionState } from '@/types/action-state';
 import type { AuthCollection } from '@/types/auth-collection';
 import { deleteCookie, getCookieValue, setCookie } from '@/utils/cookies';
 
-interface PayloadApiMe<T = any> {
+interface PayloadApiMe<T = unknown> {
   collection: string;
   exp: number;
   token: string;
   user: T;
 }
 
-const SERVER_API_URL = env.SERVER_URL + '/api';
+const SERVER_API_URL = `${env.SERVER_URL}/api`;
 
 function getTokenEnv(collection: AuthCollection) {
   return collection === 'guests' ? env.PAYLOAD_GUEST_TOKEN : env.PAYLOAD_PROTECTED_TOKEN;
@@ -47,7 +47,7 @@ export async function fetchGuest() {
   return fetchMe<PayloadGuestsCollection>('guests');
 }
 
-interface PayloadApiLogin<T = any> {
+interface PayloadApiLogin<T = unknown> {
   exp: number;
   message: string;
   token: string;

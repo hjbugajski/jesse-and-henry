@@ -5,8 +5,9 @@ import { cache } from 'react';
 import { draftMode } from 'next/headers';
 import { getPayload } from 'payload';
 
-import { fetchGuest, fetchUser } from '@/actions/auth';
 import config from '@payload-config';
+
+import { fetchGuest, fetchUser } from '@/actions/auth';
 
 export const fetchCachedPage = cache(async ({ slug: segments }: { slug: string[] }) => {
   const slugSegments = segments || ['home'];

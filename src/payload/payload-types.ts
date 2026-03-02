@@ -188,13 +188,10 @@ export interface Config {
     navigation: NavigationSelect<false> | NavigationSelect<true>;
   };
   locale: null;
-  user:
-    | (PayloadGuestsCollection & {
-        collection: 'guests';
-      })
-    | (PayloadUsersCollection & {
-        collection: 'users';
-      });
+  widgets: {
+    collections: CollectionsWidget;
+  };
+  user: PayloadGuestsCollection | PayloadUsersCollection;
   jobs: {
     tasks: unknown;
     workflows: unknown;
@@ -381,6 +378,7 @@ export interface PayloadGuestsCollection {
       }[]
     | null;
   password?: string | null;
+  collection: 'guests';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -445,6 +443,7 @@ export interface PayloadUsersCollection {
       }[]
     | null;
   password?: string | null;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -866,6 +865,16 @@ export interface PayloadLinkGroupFieldSelect<T extends boolean = true> {
   umamiEvent?: T;
   umamiEventId?: T;
   color?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collections_widget".
+ */
+export interface CollectionsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

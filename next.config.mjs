@@ -16,6 +16,7 @@ const nextConfig = {
       },
     ],
   },
+  turbopack: {},
 };
 
 export default withPayload(nextConfig);

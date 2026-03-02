@@ -118,8 +118,8 @@ export default buildConfig({
       parentFieldSlug: 'parent',
       breadcrumbsFieldSlug: 'breadcrumbs',
       generateLabel: (_, doc) => doc?.title as string,
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      generateURL: (docs) => docs.reduce((url, doc) => `${url}/${doc?.slug}`, ''),
+      // oxlint-disable-next-line typescript/no-base-to-string
+      generateURL: (docs) => docs.reduce((url, doc) => `${url}/${String(doc?.slug ?? '')}`, ''),
     }),
     s3Storage({
       collections: {

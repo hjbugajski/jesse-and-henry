@@ -148,7 +148,6 @@ export function Navigation({ callToAction, links, showCta }: PayloadNavigationGl
                 <Button
                   asChild
                   // @ts-expect-error – valid field
-                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                   color={callToAction.color}
                   iconPosition={callToAction.icon ? 'right' : 'none'}
                   size="md"
