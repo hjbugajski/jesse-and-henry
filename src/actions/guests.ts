@@ -6,7 +6,7 @@ import type { ActionState } from '@/types/action-state';
 import type { PayloadCollectionsGetApi, PayloadCollectionsPatchApi } from '@/types/payload-api';
 import { getCookieValue } from '@/utils/cookies';
 
-const SERVER_API_URL = env.SERVER_URL + '/api';
+const SERVER_API_URL = `${env.SERVER_URL}/api`;
 
 export async function fetchGuests(): Promise<PayloadGuestsCollection[] | null> {
   const jwt = await getCookieValue(env.PAYLOAD_GUEST_TOKEN);

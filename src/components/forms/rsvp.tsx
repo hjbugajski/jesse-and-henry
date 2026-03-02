@@ -36,12 +36,14 @@ const acceptDeclineSchema = mixed<string>()
 
 const conditionalYesNoSchema = mixed<string>().when(rsvpArray, {
   is: conditionalRsvpIs,
+  // oxlint-disable-next-line unicorn/no-thenable -- yup .when() API requires `then`
   then: (schema) => schema.oneOf(['yes', 'no'], 'Selection is required').required('Required'),
   otherwise: (schema) => schema.optional(),
 });
 
 const conditionalMealPreferenceSchema = mixed<string>().when(rsvpArray, {
   is: conditionalRsvpIs,
+  // oxlint-disable-next-line unicorn/no-thenable -- yup .when() API requires `then`
   then: (schema) =>
     schema.oneOf(['beef', 'fish', 'vegetarian'], 'Selection is required').required('Required'),
   otherwise: (schema) => schema.optional(),
@@ -49,6 +51,7 @@ const conditionalMealPreferenceSchema = mixed<string>().when(rsvpArray, {
 
 const conditionalStringSchema = string().when(rsvpArray, {
   is: conditionalRsvpIs,
+  // oxlint-disable-next-line unicorn/no-thenable -- yup .when() API requires `then`
   then: (schema) => schema.required('Required'),
   otherwise: (schema) => schema.optional(),
 });
@@ -144,8 +147,10 @@ export function RsvpForm({ guest, disabled = false }: RsvpFormProps) {
         {guest.first} {guest.last}
       </h3>
       <Form {...form}>
-        {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-4 grid grid-cols-1 gap-4">
+        <form
+          onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
+          className="mt-4 grid grid-cols-1 gap-4"
+        >
           <FormField
             control={form.control}
             name="rsvpWelcomeParty"

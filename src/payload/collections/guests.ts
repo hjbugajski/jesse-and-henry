@@ -111,11 +111,10 @@ const rootPostHandler: PayloadHandler = async (req) => {
     }
 
     const { payload } = req;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const data = req.json ? await req.json() : {};
     const doc = await payload.create({
       collection: 'guests',
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      // oxlint-disable-next-line typescript/no-unsafe-argument -- dynamic handler receives untyped JSON
       data: Object.assign(data, {
         password: `${env.GUEST_PASSWORD}-party`,
       }),
@@ -134,10 +133,8 @@ const reorderPatchHandler: PayloadHandler = async (req) => {
     }
 
     const { payload } = req;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const reqDocs: PayloadGuestsCollection[] = req.json
-      ? // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        await req.json().then((data) => data.docs)
+      ? await req.json().then((data: { docs: PayloadGuestsCollection[] }) => data.docs)
       : [];
 
     const docs = await Promise.all(

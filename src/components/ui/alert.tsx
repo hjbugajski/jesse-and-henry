@@ -35,8 +35,10 @@ const AlertBody = ({ className, ...props }: ComponentProps<'div'>) => (
   <div {...props} className={className} />
 );
 
-const AlertTitle = ({ className, ...props }: ComponentProps<'h1'>) => (
-  <h1 {...props} className={cn('mb-1 font-sans text-base font-bold normal-case', className)} />
+const AlertTitle = ({ children, className, ...props }: ComponentProps<'h1'>) => (
+  <h1 {...props} className={cn('mb-1 font-sans text-base font-bold normal-case', className)}>
+    {children}
+  </h1>
 );
 
 export { Alert, AlertBody, AlertTitle };

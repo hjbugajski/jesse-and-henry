@@ -2,13 +2,14 @@
 /* DO NOT MODIFY IT BECAUSE IT COULD BE REWRITTEN AT ANY TIME. */
 import type React from 'react';
 
-import '@payloadcms/next/css';
 import { RootLayout, handleServerFunctions } from '@payloadcms/next/layouts';
 import type { ServerFunctionClient } from 'payload';
 
 import config from '@payload-config';
 
 import { importMap } from './admin/importMap.js';
+
+import '@payloadcms/next/css';
 
 type Args = {
   children: React.ReactNode;

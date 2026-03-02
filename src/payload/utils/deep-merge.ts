@@ -1,7 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-function filterArray(target: any[], source: any[], key: string): any[] {
-  return source.filter((s) => !target.find((t) => t?.[key] === s?.[key]));
+function filterArray(
+  target: Record<string, unknown>[],
+  source: Record<string, unknown>[],
+  key: string,
+): Record<string, unknown>[] {
+  return source.filter((s) => !target.some((t) => t?.[key] === s?.[key]));
 }
 
 function isObject(item: unknown): item is Record<string, unknown> {

@@ -35,8 +35,7 @@ export function LogOutButton({ collection, redirectUrl }: Props) {
   }
 
   return (
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    <Button onClick={logout} disabled={pending} size="sm" iconPosition="right">
+    <Button onClick={() => void logout()} disabled={pending} size="sm" iconPosition="right">
       Log out
       {pending ? <Spinner /> : <Icons name="logout" size="sm" />}
     </Button>

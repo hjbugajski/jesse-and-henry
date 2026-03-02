@@ -1,5 +1,4 @@
-import type { ComponentProps } from 'react';
-import { createContext, useContext, useId } from 'react';
+import { type ComponentProps, createContext, useContext, useId, useMemo } from 'react';
 
 import { Slot } from '@radix-ui/react-slot';
 import type { ControllerProps, FieldPath, FieldValues } from 'react-hook-form';
@@ -25,6 +24,7 @@ const FormField = <
 >(
   props: ControllerProps<TFieldValues, TName>,
 ) => (
+  // oxlint-disable-next-line react/jsx-no-constructed-context-values -- render function, not a hook component
   <FormFieldContext.Provider value={{ name: props.name }}>
     <Controller {...props} disabled={props.disabled || undefined} />
   </FormFieldContext.Provider>
@@ -61,9 +61,10 @@ const FormItemContext = createContext<FormItemContextValue>({} as FormItemContex
 
 const FormItem = ({ className, ...props }: ComponentProps<'div'>) => {
   const id = useId();
+  const contextValue = useMemo(() => ({ id }), [id]);
 
   return (
-    <FormItemContext.Provider value={{ id }}>
+    <FormItemContext.Provider value={contextValue}>
       <div className={cn('space-y-2', className)} {...props} />
     </FormItemContext.Provider>
   );
