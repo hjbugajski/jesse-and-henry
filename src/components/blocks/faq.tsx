@@ -1,4 +1,5 @@
-import { RichText } from '@/components/rich-text';
+import type { ComponentType } from 'react';
+
 import {
   Accordion,
   AccordionContent,
@@ -6,9 +7,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordian';
-import type { PayloadFaqBlock } from '@/payload/payload-types';
+import type { PayloadFaqBlock, PayloadFaqsCollection } from '@/payload/payload-types';
 
-export function FaqBlock({ faqs }: PayloadFaqBlock) {
+interface FaqBlockProps extends PayloadFaqBlock {
+  RichText: ComponentType<{ data?: PayloadFaqsCollection['answer'] }>;
+}
+
+export function FaqBlock({ faqs, RichText }: FaqBlockProps) {
   if (!faqs?.length) {
     return null;
   }

@@ -1,11 +1,16 @@
+import type { ComponentType } from 'react';
+
 import Link from 'next/link';
 
-import { RichText } from '@/components/rich-text';
 import type { PayloadSectionBlock } from '@/payload/payload-types';
 import { cn } from '@/utils/cn';
 import { slugify } from '@/utils/slugify';
 
-export function SectionBlock({ border, content, heading }: PayloadSectionBlock) {
+interface SectionBlockProps extends PayloadSectionBlock {
+  RichText: ComponentType<{ data?: PayloadSectionBlock['content'] }>;
+}
+
+export function SectionBlock({ border, content, heading, RichText }: SectionBlockProps) {
   return (
     <section
       className={cn(
