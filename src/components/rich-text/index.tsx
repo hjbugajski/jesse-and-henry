@@ -120,13 +120,13 @@ const jsxConverters: JSXConvertersFunction<NodeType> = () => ({
   listitem: listitemConverter,
   link: linkConverter,
   blocks: {
-    alert: ({ node }) => <AlertBlock {...node.fields} />,
+    alert: ({ node }) => <AlertBlock {...node.fields} RichText={RichText} />,
     buttonLink: ({ node }) => <ButtonLinkBlock {...node.fields} />,
-    faq: ({ node }) => <FaqBlock {...node.fields} />,
+    faq: ({ node }) => <FaqBlock {...node.fields} RichText={RichText} />,
     gallery: ({ node }) => <GalleryBlock {...node.fields} />,
     hero: ({ node }) => <HeroBlock {...node.fields} />,
     imageLink: ({ node }) => <ImageLinkBlock {...node.fields} />,
-    section: ({ node }) => <SectionBlock {...node.fields} />,
+    section: ({ node }) => <SectionBlock {...node.fields} RichText={RichText} />,
   },
 });
 
