@@ -2,11 +2,12 @@
 
 import { env } from '@/env/server';
 import type { PayloadGuestsCollection } from '@/payload/payload-types';
+import { getServerSideUrl } from '@/payload/utils/get-server-side-url';
 import type { ActionState } from '@/types/action-state';
 import type { PayloadCollectionsGetApi, PayloadCollectionsPatchApi } from '@/types/payload-api';
 import { getCookieValue } from '@/utils/cookies';
 
-const SERVER_API_URL = `${env.SERVER_URL}/api`;
+const SERVER_API_URL = `${getServerSideUrl()}/api`;
 
 export async function fetchGuests(): Promise<PayloadGuestsCollection[] | null> {
   const jwt = await getCookieValue(env.PAYLOAD_GUEST_TOKEN);

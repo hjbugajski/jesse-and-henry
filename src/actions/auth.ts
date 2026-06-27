@@ -2,8 +2,10 @@
 
 import { redirect } from 'next/navigation';
 
+import { env as clientEnv } from '@/env/client';
 import { env } from '@/env/server';
 import type { PayloadGuestsCollection, PayloadUsersCollection } from '@/payload/payload-types';
+import { getServerSideUrl } from '@/payload/utils/get-server-side-url';
 import type { ActionState } from '@/types/action-state';
 import type { AuthCollection } from '@/types/auth-collection';
 import { deleteCookie, getCookieValue, setCookie } from '@/utils/cookies';
@@ -15,7 +17,7 @@ interface PayloadApiMe<T = unknown> {
   user: T;
 }
 
-const SERVER_API_URL = `${env.SERVER_URL}/api`;
+const SERVER_API_URL = `${getServerSideUrl()}/api`;
 
 function getTokenEnv(collection: AuthCollection) {
   return collection === 'guests' ? env.PAYLOAD_GUEST_TOKEN : env.PAYLOAD_PROTECTED_TOKEN;
@@ -135,7 +137,7 @@ function cleanString(str: string) {
 export async function fetchGuestLogin(values: GuestLoginParams): Promise<ActionState> {
   const { first, middle, last, password: providedPassword, code } = values;
   const middleName = middle ? `.${cleanString(middle)}` : '';
-  const email = `${cleanString(first)}${middleName}.${cleanString(last)}@${env.DOMAIN}`;
+  const email = `${cleanString(first)}${middleName}.${cleanString(last)}@${clientEnv.NEXT_PUBLIC_DOMAIN}`;
   const password = `${providedPassword}-${code}`;
 
   const data = await fetchLogin<PayloadGuestsCollection>('guests', { email, password });

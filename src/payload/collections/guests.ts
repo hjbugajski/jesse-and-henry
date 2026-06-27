@@ -8,6 +8,7 @@ import type {
   PayloadRequest,
 } from 'payload';
 
+import { env as clientEnv } from '@/env/client';
 import { env } from '@/env/server';
 import {
   Role,
@@ -33,7 +34,7 @@ async function generateRandomEmail({ payload }: PayloadRequest) {
   let email: string;
 
   do {
-    email = `${nanoid()}@${env.DOMAIN}`;
+    email = `${nanoid()}@${clientEnv.NEXT_PUBLIC_DOMAIN}`;
   } while (emails.has(email));
 
   return email;
@@ -56,7 +57,7 @@ const beforeValidateHook: CollectionBeforeValidateHook<PayloadGuestsCollection> 
   if (first && last) {
     const middleName = middle ? `.${cleanString(middle)}` : '';
 
-    newEmail = `${cleanString(first)}${middleName}.${cleanString(last)}@${env.DOMAIN}`;
+    newEmail = `${cleanString(first)}${middleName}.${cleanString(last)}@${clientEnv.NEXT_PUBLIC_DOMAIN}`;
   } else {
     newEmail = await generateRandomEmail(req);
   }
