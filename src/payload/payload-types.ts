@@ -11,8 +11,7 @@
  * via the `definition` "PayloadTagColorField".
  */
 export type PayloadTagColorField =
-  | ('gray' | 'green' | 'teal' | 'cyan' | 'blue' | 'violet' | 'purple' | 'plum' | 'pink' | 'red' | 'orange')
-  | null;
+  ('gray' | 'green' | 'teal' | 'cyan' | 'blue' | 'violet' | 'purple' | 'plum' | 'pink' | 'red' | 'orange') | null;
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "PayloadRsvpField".
