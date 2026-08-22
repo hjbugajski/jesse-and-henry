@@ -11,5 +11,5 @@ export async function fetchCachedGlobal<T>(slug: GlobalSlug): Promise<T> {
 
   const payload = await getPayload({ config });
 
-  return (await payload.findGlobal({ slug })) as T;
+  return (await payload.findGlobal({ slug, overrideAccess: false })) as T;
 }
