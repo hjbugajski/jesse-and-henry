@@ -33,8 +33,12 @@ export async function updateGuest(
   id: string,
   fields: Partial<PayloadGuestsCollection>,
 ): Promise<ActionState> {
+  if (!/^[\w-]+$/.test(id)) {
+    return { status: 'error', message: 'Invalid guest id' };
+  }
+
   const jwt = await getCookieValue(env.PAYLOAD_GUEST_TOKEN);
-  const res = await fetch(`${SERVER_API_URL}/guests/${id}`, {
+  const res = await fetch(`${SERVER_API_URL}/guests/${encodeURIComponent(id)}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',

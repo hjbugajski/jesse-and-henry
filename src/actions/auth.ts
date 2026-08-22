@@ -19,6 +19,13 @@ interface PayloadApiMe<T = unknown> {
 
 const SERVER_API_URL = `${getServerSideUrl()}/api`;
 
+/** Server-action args arrive untrusted at runtime; the TS type alone does not constrain callers. */
+function assertAuthCollection(collection: string): asserts collection is AuthCollection {
+  if (collection !== 'users' && collection !== 'guests') {
+    throw new Error('Invalid auth collection');
+  }
+}
+
 function getTokenEnv(collection: AuthCollection) {
   return collection === 'guests' ? env.PAYLOAD_GUEST_TOKEN : env.PAYLOAD_PROTECTED_TOKEN;
 }
@@ -80,6 +87,7 @@ export async function fetchLogout(
   collection: AuthCollection,
   redirectUrl: string,
 ): Promise<ActionState | undefined> {
+  assertAuthCollection(collection);
   const token = getTokenEnv(collection);
   const jwt = await getCookieValue(token);
   const res = await fetch(`${SERVER_API_URL}/${collection}/logout`, {
