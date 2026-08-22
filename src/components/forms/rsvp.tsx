@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as RadioGroup from '@radix-ui/react-radio-group';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 
 import { updateGuest } from '@/actions/guests';
@@ -105,9 +105,10 @@ export function RsvpForm({ guest, disabled = false }: RsvpFormProps) {
   });
   const { toast } = useToast();
 
-  const rsvpRehearsalDinner = form.watch('rsvpRehearsalDinner') === 'accept';
-  const rsvpWeddingDay = form.watch('rsvpWeddingDay') === 'accept';
-  const rsvpPoolDay = form.watch('rsvpPoolDay') === 'accept';
+  const [rsvpRehearsalDinner, rsvpWeddingDay, rsvpPoolDay] = useWatch({
+    control: form.control,
+    name: ['rsvpRehearsalDinner', 'rsvpWeddingDay', 'rsvpPoolDay'],
+  }).map((value) => value === 'accept');
   const attendingEvent = rsvpRehearsalDinner || rsvpWeddingDay || rsvpPoolDay;
 
   async function onSubmit(values: RsvpFormValues) {
