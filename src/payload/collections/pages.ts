@@ -1,5 +1,5 @@
 import { BlocksFeature, lexicalEditor } from '@payloadcms/richtext-lexical';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import type {
   CollectionAfterChangeHook,
   CollectionAfterDeleteHook,
@@ -50,6 +50,15 @@ const setPath: CollectionAfterChangeHook<PayloadPagesCollection> = ({ context, d
   });
 };
 
+function revalidatePage(path: string) {
+  if (path === '/home') {
+    revalidatePath('/');
+  }
+
+  revalidatePath(path);
+  revalidateTag(`page_${path}`, { expire: 0 });
+}
+
 const revalidatePageAfterChange: CollectionAfterChangeHook<PayloadPagesCollection> = ({
   doc,
   previousDoc,
@@ -57,22 +66,12 @@ const revalidatePageAfterChange: CollectionAfterChangeHook<PayloadPagesCollectio
 }) => {
   if (doc._status === 'published' && doc.path) {
     payload.logger.info(`Revalidating path: ${doc.path}`);
-
-    if (doc.path === '/home') {
-      revalidatePath('/');
-    }
-
-    revalidatePath(doc.path);
+    revalidatePage(doc.path);
   }
 
   if (previousDoc?._status === 'published' && doc._status !== 'published' && previousDoc.path) {
     payload.logger.info(`Revalidating previous path: ${previousDoc.path}`);
-
-    if (doc.path === '/home') {
-      revalidatePath('/');
-    }
-
-    revalidatePath(previousDoc.path);
+    revalidatePage(previousDoc.path);
   }
 
   return doc;
@@ -84,12 +83,7 @@ export const revalidatePageAfterDelete: CollectionAfterDeleteHook<PayloadPagesCo
 }) => {
   if (!context.disableRevalidate && doc.path) {
     payload.logger.info(`Revalidating path: ${doc.path}`);
-
-    if (doc.path === '/home') {
-      revalidatePath('/');
-    }
-
-    revalidatePath(doc.path);
+    revalidatePage(doc.path);
   }
 
   return doc;

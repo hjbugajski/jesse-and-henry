@@ -1,9 +1,11 @@
+import { Suspense } from 'react';
+
 import Link from 'next/link';
 
 import { fetchGuest } from '@/actions/auth';
 import { fetchCachedGlobal } from '@/actions/globals';
 import { fetchGuests } from '@/actions/guests';
-import { fetchCachedPage } from '@/actions/page';
+import { fetchCachedPageMeta } from '@/actions/page';
 import { metadata } from '@/app/(site)/layout';
 import { RsvpForm } from '@/components/forms/rsvp';
 import { LogOutButton } from '@/components/log-out-button';
@@ -17,7 +19,7 @@ import { pageTitle } from '@/utils/page';
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
-  const page = await fetchCachedPage({ slug });
+  const page = await fetchCachedPageMeta({ slug });
 
   return {
     title: pageTitle(page?.title, metadata),
@@ -34,7 +36,19 @@ function PageToolbar() {
   );
 }
 
-export default async function Page() {
+const RsvpLoading = () => (
+  <div className="flex flex-col gap-6">
+    <div className="bg-black/5 h-9 w-2/3 animate-pulse rounded-lg" />
+    <div className="bg-black/5 h-24 w-full animate-pulse rounded-xl" />
+    <div className="bg-black/5 h-40 w-full animate-pulse rounded-xl" />
+  </div>
+);
+
+/**
+ * The guest and party are read from the visitor's Payload session cookie, so they stream in behind
+ * the toolbar rather than blocking the static shell.
+ */
+async function Rsvp() {
   const [guest, guests, config] = await Promise.all([
     fetchGuest(),
     fetchGuests(),
@@ -43,19 +57,16 @@ export default async function Page() {
 
   if (!guest?.user || !guests?.length) {
     return (
-      <>
-        <PageToolbar />
-        <Alert color="danger">
-          <Icons name="alert" />
-          <AlertBody className="flex flex-col gap-2">
-            <p>
-              There was an error loading your RSVP. Reload the page and try again. If the issue
-              persists, email{' '}
-              <Link href="mailto:support@jesseandhenry.com">support@jesseandhenry.com</Link>.
-            </p>
-          </AlertBody>
-        </Alert>
-      </>
+      <Alert color="danger">
+        <Icons name="alert" />
+        <AlertBody className="flex flex-col gap-2">
+          <p>
+            There was an error loading your RSVP. Reload the page and try again. If the issue
+            persists, email{' '}
+            <Link href="mailto:support@jesseandhenry.com">support@jesseandhenry.com</Link>.
+          </p>
+        </AlertBody>
+      </Alert>
     );
   }
 
@@ -64,7 +75,6 @@ export default async function Page() {
 
   return (
     <>
-      <PageToolbar />
       <h2 className="mb-2 text-3xl tracking-wider">Welcome, {user.first}</h2>
       <p className="mb-2 text-sm">
         {guests.length === 1 ? 'RSVP below.' : 'RSVP below for each guest in your party.'}
@@ -115,7 +125,17 @@ export default async function Page() {
         .map((guest) => (
           <RsvpForm key={guest.id} guest={guest} disabled={disableRsvp} />
         ))}
+    </>
+  );
+}
 
+export default function Page() {
+  return (
+    <>
+      <PageToolbar />
+      <Suspense fallback={<RsvpLoading />}>
+        <Rsvp />
+      </Suspense>
       <div className="border-t-2 border-neutral-variant-50/50 pt-6">
         <Alert>
           <Icons name="help" />
