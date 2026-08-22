@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
+import { zodResolver } from '@hookform/resolvers/zod';
 import * as RadioGroup from '@radix-ui/react-radio-group';
-import { useForm } from 'react-hook-form';
-import { type InferType, mixed, object, string } from 'yup';
+import { useForm, useWatch } from 'react-hook-form';
+import { z } from 'zod';
 
 import { updateGuest } from '@/actions/guests';
 import { Button } from '@/components/ui/button';
@@ -26,49 +26,58 @@ import type { PayloadGuestsCollection } from '@/payload/payload-types';
 import type { ActionState } from '@/types/action-state';
 import { cn } from '@/utils/cn';
 
-const rsvpArray = ['rsvpRehearsalDinner', 'rsvpWeddingDay', 'rsvpPoolDay'];
+/** RSVP selections that make the remaining guest details required. */
+const attendanceFields = ['rsvpRehearsalDinner', 'rsvpWeddingDay', 'rsvpPoolDay'] as const;
 
-const conditionalRsvpIs = (...args: unknown[]) => args.some((arg) => arg === 'accept');
+const conditionalOptions = {
+  transportationToVenue: ['yes', 'no'],
+  transportationFromVenue: ['yes', 'no'],
+  mealPreference: ['beef', 'fish', 'vegetarian'],
+} as const;
 
-const acceptDeclineSchema = mixed<string>()
-  .oneOf(['accept', 'decline'], 'Selection is required')
-  .required('Required');
+const conditionalTextFields = ['legalName', 'dateOfBirth', 'countryOfBirth'] as const;
 
-const conditionalYesNoSchema = mixed<string>().when(rsvpArray, {
-  is: conditionalRsvpIs,
-  // oxlint-disable-next-line unicorn/no-thenable -- yup .when() API requires `then`
-  then: (schema) => schema.oneOf(['yes', 'no'], 'Selection is required').required('Required'),
-  otherwise: (schema) => schema.optional(),
-});
+const acceptDeclineOptions: string[] = ['accept', 'decline'];
 
-const conditionalMealPreferenceSchema = mixed<string>().when(rsvpArray, {
-  is: conditionalRsvpIs,
-  // oxlint-disable-next-line unicorn/no-thenable -- yup .when() API requires `then`
-  then: (schema) =>
-    schema.oneOf(['beef', 'fish', 'vegetarian'], 'Selection is required').required('Required'),
-  otherwise: (schema) => schema.optional(),
-});
+const acceptDeclineSchema = z
+  .string()
+  .refine((value) => acceptDeclineOptions.includes(value), 'Selection is required');
 
-const conditionalStringSchema = string().when(rsvpArray, {
-  is: conditionalRsvpIs,
-  // oxlint-disable-next-line unicorn/no-thenable -- yup .when() API requires `then`
-  then: (schema) => schema.required('Required'),
-  otherwise: (schema) => schema.optional(),
-});
+const formSchema = z
+  .object({
+    rsvpWelcomeParty: acceptDeclineSchema,
+    rsvpRehearsalDinner: acceptDeclineSchema,
+    rsvpWeddingDay: acceptDeclineSchema,
+    rsvpPoolDay: acceptDeclineSchema,
+    transportationToVenue: z.string(),
+    transportationFromVenue: z.string(),
+    legalName: z.string(),
+    dateOfBirth: z.string(),
+    countryOfBirth: z.string(),
+    mealPreference: z.string(),
+    allergies: z.string().optional(),
+  })
+  .superRefine((values, ctx) => {
+    if (!attendanceFields.some((field) => values[field] === 'accept')) {
+      return;
+    }
 
-const formSchema = object({
-  rsvpWelcomeParty: acceptDeclineSchema,
-  rsvpRehearsalDinner: acceptDeclineSchema,
-  rsvpWeddingDay: acceptDeclineSchema,
-  rsvpPoolDay: acceptDeclineSchema,
-  transportationToVenue: conditionalYesNoSchema,
-  transportationFromVenue: conditionalYesNoSchema,
-  legalName: conditionalStringSchema,
-  dateOfBirth: conditionalStringSchema,
-  countryOfBirth: conditionalStringSchema,
-  mealPreference: conditionalMealPreferenceSchema,
-  allergies: string().optional(),
-});
+    for (const field of Object.keys(conditionalOptions) as (keyof typeof conditionalOptions)[]) {
+      const options: readonly string[] = conditionalOptions[field];
+
+      if (!options.includes(values[field])) {
+        ctx.addIssue({ code: 'custom', path: [field], message: 'Selection is required' });
+      }
+    }
+
+    for (const field of conditionalTextFields) {
+      if (!values[field]) {
+        ctx.addIssue({ code: 'custom', path: [field], message: 'Required' });
+      }
+    }
+  });
+
+type RsvpFormValues = z.infer<typeof formSchema>;
 
 type RsvpFormProps = {
   guest: PayloadGuestsCollection;
@@ -78,8 +87,8 @@ type RsvpFormProps = {
 export function RsvpForm({ guest, disabled = false }: RsvpFormProps) {
   const [formState, setFormState] = useState<ActionState>({ status: 'idle', message: null });
 
-  const form = useForm<InferType<typeof formSchema>>({
-    resolver: yupResolver(formSchema),
+  const form = useForm<RsvpFormValues>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       rsvpWelcomeParty: guest.rsvpWelcomeParty || '',
       rsvpRehearsalDinner: guest.rsvpRehearsalDinner || '',
@@ -96,12 +105,13 @@ export function RsvpForm({ guest, disabled = false }: RsvpFormProps) {
   });
   const { toast } = useToast();
 
-  const rsvpRehearsalDinner = form.watch('rsvpRehearsalDinner') === 'accept';
-  const rsvpWeddingDay = form.watch('rsvpWeddingDay') === 'accept';
-  const rsvpPoolDay = form.watch('rsvpPoolDay') === 'accept';
+  const [rsvpRehearsalDinner, rsvpWeddingDay, rsvpPoolDay] = useWatch({
+    control: form.control,
+    name: ['rsvpRehearsalDinner', 'rsvpWeddingDay', 'rsvpPoolDay'],
+  }).map((value) => value === 'accept');
   const attendingEvent = rsvpRehearsalDinner || rsvpWeddingDay || rsvpPoolDay;
 
-  async function onSubmit(values: InferType<typeof formSchema>) {
+  async function onSubmit(values: RsvpFormValues) {
     if (disabled) {
       return;
     }

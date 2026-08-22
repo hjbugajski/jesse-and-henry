@@ -21,8 +21,9 @@ const FormFieldContext = createContext<FormFieldContextValue>({} as FormFieldCon
 const FormField = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 >(
-  props: ControllerProps<TFieldValues, TName>,
+  props: ControllerProps<TFieldValues, TName, TTransformedValues>,
 ) => (
   // oxlint-disable-next-line react/jsx-no-constructed-context-values -- render function, not a hook component
   <FormFieldContext.Provider value={{ name: props.name }}>

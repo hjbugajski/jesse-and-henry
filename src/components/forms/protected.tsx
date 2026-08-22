@@ -2,11 +2,10 @@
 
 import { useState } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import type { InferType } from 'yup';
-import { object, string } from 'yup';
+import { z } from 'zod';
 
 import { fetchUserLogin } from '@/actions/auth';
 import { Button } from '@/components/ui/button';
@@ -28,15 +27,17 @@ const initialState: ActionState = {
   message: null,
 };
 
-const formSchema = object({
-  password: string().required('Password is required'),
+const formSchema = z.object({
+  password: z.string().min(1, 'Password is required'),
 });
+
+type ProtectedFormValues = z.infer<typeof formSchema>;
 
 export function ProtectedForm() {
   const [formState, setFormState] = useState(initialState);
 
-  const form = useForm<InferType<typeof formSchema>>({
-    resolver: yupResolver(formSchema),
+  const form = useForm<ProtectedFormValues>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       password: '',
     },
@@ -45,7 +46,7 @@ export function ProtectedForm() {
   const searchParams = useSearchParams();
   const { toast } = useToast();
 
-  async function onSubmit(values: InferType<typeof formSchema>) {
+  async function onSubmit(values: ProtectedFormValues) {
     setFormState({ status: 'pending', message: null });
 
     const state = await fetchUserLogin(values);
