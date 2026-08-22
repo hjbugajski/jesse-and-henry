@@ -26,9 +26,13 @@ function assertAuthCollection(collection: string): asserts collection is AuthCol
   }
 }
 
+/** Browsers strip these before parsing a URL, so `/\t/evil.com` would resolve to `//evil.com`. */
+// oxlint-disable-next-line no-control-regex
+const CONTROL_CHARS = /[\u0000-\u001F\u007F]/;
+
 /** Server-action args arrive untrusted at runtime; anything but a same-site path is an open redirect. */
 function safeRedirectUrl(url: string) {
-  return /^\/(?![/\\])/.test(url) ? url : '/';
+  return !CONTROL_CHARS.test(url) && /^\/(?![/\\])/.test(url) ? url : '/';
 }
 
 function getTokenEnv(collection: AuthCollection) {
