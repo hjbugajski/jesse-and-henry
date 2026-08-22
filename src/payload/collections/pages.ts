@@ -57,6 +57,8 @@ function revalidatePage(path: string) {
 
   revalidatePath(path);
   revalidateTag(`page_${path}`, { expire: 0 });
+  // The navigation global caches populated page paths and breadcrumbs.
+  revalidateTag('global_navigation', { expire: 0 });
 }
 
 const revalidatePageAfterChange: CollectionAfterChangeHook<PayloadPagesCollection> = ({
@@ -69,7 +71,9 @@ const revalidatePageAfterChange: CollectionAfterChangeHook<PayloadPagesCollectio
     revalidatePage(doc.path);
   }
 
-  if (previousDoc?._status === 'published' && doc._status !== 'published' && previousDoc.path) {
+  const wasUnpublished = previousDoc?._status === 'published' && doc._status !== 'published';
+
+  if (previousDoc?.path && (previousDoc.path !== doc.path || wasUnpublished)) {
     payload.logger.info(`Revalidating previous path: ${previousDoc.path}`);
     revalidatePage(previousDoc.path);
   }
