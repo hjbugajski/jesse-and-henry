@@ -8,6 +8,7 @@ import config from '@payload-config';
 import { fetchCachedPage, fetchCachedPageMeta } from '@/actions/page';
 import { metadata } from '@/app/(site)/layout';
 import { RichText } from '@/components/rich-text';
+import { ScrollToHash } from '@/components/scroll-to-hash';
 import type { PageProps } from '@/types/page-props';
 import { pageTitle } from '@/utils/page';
 
@@ -68,7 +69,12 @@ async function PageContent({ params }: PageProps) {
     notFound();
   }
 
-  return <RichText data={page.content} />;
+  return (
+    <>
+      <RichText data={page.content} />
+      <ScrollToHash />
+    </>
+  );
 }
 
 export default function Page({ params }: PageProps) {
