@@ -26,6 +26,11 @@ function assertAuthCollection(collection: string): asserts collection is AuthCol
   }
 }
 
+/** Server-action args arrive untrusted at runtime; anything but a same-site path is an open redirect. */
+function safeRedirectUrl(url: string) {
+  return /^\/(?![/\\])/.test(url) ? url : '/';
+}
+
 function getTokenEnv(collection: AuthCollection) {
   return collection === 'guests' ? env.PAYLOAD_GUEST_TOKEN : env.PAYLOAD_PROTECTED_TOKEN;
 }
@@ -107,7 +112,7 @@ export async function fetchLogout(
   }
 
   await deleteCookie(token);
-  redirect(redirectUrl);
+  redirect(safeRedirectUrl(redirectUrl));
 }
 
 interface ProtectedLoginParams {
