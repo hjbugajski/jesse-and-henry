@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 
-import { fetchCachedPage } from '@/actions/page';
+import { fetchCachedPageMeta } from '@/actions/page';
 import { metadata } from '@/app/(site)/layout';
 import { ProtectedForm } from '@/components/forms/protected';
 import type { PageProps } from '@/types/page-props';
@@ -8,7 +8,7 @@ import { pageTitle } from '@/utils/page';
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
-  const page = await fetchCachedPage({ slug });
+  const page = await fetchCachedPageMeta({ slug });
 
   return {
     title: pageTitle(page?.title, metadata),

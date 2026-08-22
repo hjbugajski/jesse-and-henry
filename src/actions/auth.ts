@@ -26,6 +26,15 @@ function assertAuthCollection(collection: string): asserts collection is AuthCol
   }
 }
 
+/** Browsers strip these before parsing a URL, so `/\t/evil.com` would resolve to `//evil.com`. */
+// oxlint-disable-next-line no-control-regex
+const CONTROL_CHARS = /[\u0000-\u001F\u007F]/;
+
+/** Server-action args arrive untrusted at runtime; anything but a same-site path is an open redirect. */
+function safeRedirectUrl(url: string) {
+  return !CONTROL_CHARS.test(url) && /^\/(?![/\\])/.test(url) ? url : '/';
+}
+
 function getTokenEnv(collection: AuthCollection) {
   return collection === 'guests' ? env.PAYLOAD_GUEST_TOKEN : env.PAYLOAD_PROTECTED_TOKEN;
 }
@@ -107,7 +116,7 @@ export async function fetchLogout(
   }
 
   await deleteCookie(token);
-  redirect(redirectUrl);
+  redirect(safeRedirectUrl(redirectUrl));
 }
 
 interface ProtectedLoginParams {
