@@ -24,7 +24,12 @@ export async function generateStaticParams() {
       },
     });
 
-    return pages.docs.map(({ path }) => ({ slug: path?.split('/')?.slice(1) || undefined }));
+    const params = pages.docs.map(({ path }) => ({
+      slug: path?.split('/')?.slice(1) || undefined,
+    }));
+
+    // Cache Components requires at least one param so the route can be prerendered and validated.
+    return params.length ? params : [{ slug: undefined }];
   } catch {
     return [{ slug: undefined }];
   }
