@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { type InferType, object, string } from 'yup';
+import { z } from 'zod';
 
 import { fetchGuestLogin } from '@/actions/auth';
 import { Button } from '@/components/ui/button';
@@ -28,19 +28,21 @@ const initialState: ActionState = {
   message: null,
 };
 
-const formSchema = object({
-  first: string().required('First name is required'),
-  middle: string().optional(),
-  last: string().required('Last name is required'),
-  password: string().required('Password is required'),
-  code: string().required('Code is required'),
+const formSchema = z.object({
+  first: z.string().min(1, 'First name is required'),
+  middle: z.string().optional(),
+  last: z.string().min(1, 'Last name is required'),
+  password: z.string().min(1, 'Password is required'),
+  code: z.string().min(1, 'Code is required'),
 });
+
+type RsvpLoginFormValues = z.infer<typeof formSchema>;
 
 export function RsvpLoginForm() {
   const [formState, setFormState] = useState(initialState);
 
-  const form = useForm<InferType<typeof formSchema>>({
-    resolver: yupResolver(formSchema),
+  const form = useForm<RsvpLoginFormValues>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       first: '',
       middle: '',
@@ -52,7 +54,7 @@ export function RsvpLoginForm() {
   const router = useRouter();
   const { toast } = useToast();
 
-  async function onSubmit(values: InferType<typeof formSchema>) {
+  async function onSubmit(values: RsvpLoginFormValues) {
     setFormState({ status: 'pending', message: null });
 
     const state = await fetchGuestLogin(values);
