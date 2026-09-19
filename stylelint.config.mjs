@@ -2,6 +2,7 @@ export default {
   extends: ['stylelint-config-standard', 'stylelint-config-clean-order'],
   rules: {
     'at-rule-no-deprecated': [true, { ignoreAtRules: ['apply'] }],
+    'at-rule-prelude-no-invalid': [true, { ignoreAtRules: ['apply'] }],
     'at-rule-no-unknown': [
       true,
       { ignoreAtRules: ['custom-variant', 'plugin', 'source', 'theme', 'utility', 'variant'] },
